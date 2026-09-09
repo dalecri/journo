@@ -436,6 +436,25 @@ svg.icon{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;s
 .day-tab.marked:after{content:'';width:5px;height:5px;border-radius:50%;background:var(--accent-ink);position:absolute;right:3px;top:4px}.day-tab{position:relative}
 .date-label{font-size:12px;min-width:82px!important}.saved-pages{display:flex;flex-direction:column;gap:6px;margin:10px 0}.saved-pages button{display:flex;align-items:center;gap:10px;text-align:left;background:var(--accent-soft);border:0;border-radius:9px;padding:12px;min-height:44px;font-size:14px}.saved-pages p{font-size:14px;line-height:1.7}.date-actions{display:flex;gap:8px;justify-content:space-between}.date-actions button{flex:1}.mobile-nav{gap:2px}.mobile-nav button{padding:6px 8px}.theme-picker{z-index:62}
 
+
+/* Quiet desk, clean notebook */
+body[data-theme="bluebell"]{--desk:#192c36;--desk-glow:#314958}
+body[data-theme="lavender"]{--desk:#292333;--desk-glow:#484056}
+body[data-theme="peach"]{--desk:#352923;--desk-glow:#564039}
+body[data-theme="sage"]{--desk:#202e28;--desk-glow:#3c4c3d}
+body[data-theme="rose"]{--desk:#34252d;--desk-glow:#533c47}
+body[data-theme="butter"]{--desk:#302d21;--desk-glow:#4d4933}
+body[data-theme="mint"]{--desk:#1d302d;--desk-glow:#34514a}
+body[data-theme="cloud"]{--desk:#242a33;--desk-glow:#3e4959}
+body{background:radial-gradient(ellipse at 50% 38%,var(--desk-glow),var(--desk) 78%);transition:background-color .3s}
+.day-rail{display:none!important}.bookwrap{padding-left:0!important}.layout{padding:20px 25px 66px}.bookwrap{max-width:1280px}.book{box-shadow:2px 3px 0 var(--paper),4px 5px 0 var(--binding),0 24px 60px #0005}
+.mobile-nav{background:transparent;border:0;box-shadow:none;backdrop-filter:none;padding:0;bottom:max(10px,env(safe-area-inset-bottom));gap:32px}.mobile-nav button{color:#f4f0de99;background:transparent!important;min-width:40px;min-height:38px}.mobile-nav button:hover{color:#fff}.mobile-nav svg{width:18px;height:18px}.mobile-nav #soundToggle,.mobile-nav #chooseDate{display:none!important}
+body>.theme-picker{position:fixed;left:20px;right:auto;top:auto;bottom:max(16px,env(safe-area-inset-bottom));z-index:80}.theme-trigger{width:24px;height:24px;border-radius:50%;background:var(--accent)!important;border:3px solid #ffffff36;box-shadow:none;font-size:0}.theme-trigger svg{display:none}.theme-trigger:focus-visible{outline-color:white}.theme-menu{left:0;right:auto;top:auto;bottom:38px;background:var(--paper)}
+.bookmark-control{top:0;right:28px;width:25px;height:62px;min-height:0;padding:0;border:0;border-radius:0;background:#b65b60!important;clip-path:polygon(0 0,100% 0,100% 100%,50% 81%,0 100%);opacity:.38;box-shadow:none;transition:height .2s,opacity .2s}.bookmark-control svg{display:none}.bookmark-control[aria-pressed="true"]{opacity:1;height:70px;background:#b65b60!important}.bookmark-control:hover,.bookmark-control:focus-visible{opacity:1}.bookmark-control:focus-visible{filter:brightness(1.3)}
+#fullDate{cursor:pointer;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:4px;text-decoration-color:#8b806455}
+.codeitem{background:#f6f3e9;border:1px solid #c5bc9b;border-radius:5px;min-width:180px;min-height:105px;padding:12px;box-shadow:2px 5px 12px #30281914}.codeitem .content{display:flex;flex-direction:column;gap:8px}.code-head{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:11px;color:#6f6955;flex:none}.code-controls{display:flex;gap:4px}.code-controls button{border:1px solid #c9c3af;border-radius:6px;background:#fff9;min-height:32px;padding:4px 7px;font-size:11px}.code-preview{white-space:pre;overflow:hidden;margin:0;min-height:0;flex:1;color:#394b49;font:12px/1.65 var(--mono);cursor:pointer}.code-preview:empty:before{content:'// a little idea…';color:#807d6d}.codeitem .tape-handle{width:52px}.code-editor-sheet{width:min(800px,94vw);height:82dvh;display:flex;flex-direction:column}.code-editor-sheet textarea{flex:1;min-height:100px;resize:none;white-space:pre;tab-size:2;font:16px/1.7 var(--mono);background:#f6f3e9;color:#394b49}.code-editor-sheet .row{flex:none}
+@media(max-width:900px){.layout{padding:max(9px,env(safe-area-inset-top)) 9px calc(56px + env(safe-area-inset-bottom))}.bookmark-control{right:20px;width:22px;height:51px}.bookmark-control[aria-pressed="true"]{height:60px}body>.theme-picker{left:18px;bottom:max(14px,env(safe-area-inset-bottom))}.mobile-nav{bottom:max(8px,env(safe-area-inset-bottom))}.bookwrap{padding:0}.placed.dayline{width:76%!important}}
+
 </style>
 </head>
 <body>
@@ -567,7 +586,7 @@ function save(show=true){
 function serializeItems(){
   return [...board.querySelectorAll('.item')].map(el=>({
     id:el.dataset.id,type:el.dataset.type,x:parseFloat(el.style.left)||0,y:parseFloat(el.style.top)||0,w:parseFloat(el.style.width)||el.offsetWidth,h:parseFloat(el.style.height)||el.offsetHeight,z:parseInt(el.style.zIndex)||1,rot:parseFloat(el.dataset.rot)||0,
-    html:el.dataset.type==='photo'||el.dataset.type==='map'||el.dataset.type==='sticker'||el.dataset.type==='tape'||el.dataset.type==='shape'?el.dataset.payload:(el.querySelector('.content')?.innerHTML||'')
+    html:el.dataset.type==='code'||el.dataset.type==='photo'||el.dataset.type==='map'||el.dataset.type==='sticker'||el.dataset.type==='tape'||el.dataset.type==='shape'?el.dataset.payload:(el.querySelector('.content')?.innerHTML||'')
   }))
 }
 function load(){
@@ -712,7 +731,7 @@ function itemBase(type,x=35,y=35,w=160,h=110){
 function attachItem(el){
   board.appendChild(el);
   el.addEventListener('pointerdown',e=>{
-    if(e.target.closest('button')||e.target.classList.contains('resize')||e.target.closest('[contenteditable="true"]'))return;
+    if(e.target.closest('button,textarea,input,select')||e.target.classList.contains('resize')||e.target.closest('[contenteditable="true"]'))return;
     selectItem(el);el.setPointerCapture(e.pointerId);const sx=e.clientX,sy=e.clientY,ox=parseFloat(el.style.left)||0,oy=parseFloat(el.style.top)||0;
     const move=ev=>{let nx=ox+ev.clientX-sx,ny=oy+ev.clientY-sy;nx=Math.max(0,Math.min(board.clientWidth-el.offsetWidth,nx));ny=Math.max(0,Math.min(board.clientHeight-el.offsetHeight,ny));el.style.left=nx+'px';el.style.top=ny+'px'};
     const up=()=>{el.removeEventListener('pointermove',move);el.removeEventListener('pointerup',up);save(false)};
@@ -730,6 +749,7 @@ board.addEventListener('pointerdown',e=>{if(e.target===board&&selectedItem){sele
 
 function renderItem(o){
   let el=itemBase(o.type,o.x,o.y,o.w,o.h);el.dataset.id=o.id;el.dataset.rot=o.rot||0;el.style.zIndex=o.z||++zCounter;el.style.transform=`rotate(${o.rot||0}deg)`;const c=el.querySelector('.content');
+  if(o.type==='code'){renderCode(el,c,o.html)}
   if(o.type==='note'){el.classList.add('note');c.contentEditable='true';c.innerHTML=o.html||'tiny thought…'}
   if(o.type==='grid'){el.classList.add('gridnote');c.contentEditable='true';c.innerHTML=o.html||'list / sketch / plan'}
   if(o.type==='text'){el.classList.add('textitem');c.contentEditable='true';c.innerHTML=o.html||'type something…'}
@@ -931,6 +951,20 @@ const photoRender=renderItem;renderItem=function(o){const el=photoRender(o);enab
 // Stop date swipes from stealing interaction with editable pieces and photographs.
 swipeZone.addEventListener('touchstart',e=>{if(e.target.closest('.placed,.item,.add-menu,.add-piece'))swipeActive=false},{passive:true});
 updateDateControls();
+
+// Theme swatch lives on the desk. The page date opens navigation when needed.
+document.body.append($('.theme-picker'));
+soundEnabled=true;localStorage.setItem('softleaf-sound','true');
+$('#fullDate').tabIndex=0;$('#fullDate').setAttribute('role','button');$('#fullDate').setAttribute('aria-label','Choose date or open bookmarks');$('#fullDate').onclick=()=>dateButton.click();$('#fullDate').onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();dateButton.click()}};
+iconPaths.code='m8 6-6 6 6 6M16 6l6 6-6 6M14 4l-4 16';
+const codeAdd=document.createElement('button');codeAdd.innerHTML=icon('code')+'<span>Code</span>';menu.append(codeAdd);codeAdd.onclick=()=>{menu.classList.remove('open');add.setAttribute('aria-expanded','false');const el=renderItem({id:'i'+Date.now(),type:'code',x:Math.min(60,board.clientWidth*.12),y:Math.min(90,board.clientHeight*.18),w:Math.min(300,board.clientWidth-35),h:200,z:++zCounter,rot:0,html:''});save(false);openCode(el)};
+const codeModal=document.createElement('div');codeModal.className='modal';codeModal.id='codeModal';codeModal.setAttribute('role','dialog');codeModal.setAttribute('aria-modal','true');codeModal.setAttribute('aria-label','Edit code snippet');codeModal.innerHTML='<div class="sheet code-editor-sheet"><h3>A little space to code</h3><textarea id="codeInput" aria-label="Code" spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" placeholder="// your next idea" wrap="off"></textarea><div class="row"><button class="btn" id="copyCodeEditor">copy</button><button class="btn primary" id="finishCode">done</button></div></div>';document.body.append(codeModal);let activeCode=null;
+function renderCode(el,c,value){el.classList.add('codeitem');el.dataset.payload=value||'';c.replaceChildren();const head=document.createElement('div');head.className='code-head';head.innerHTML='<span>&lt;/&gt; code</span><div class="code-controls"><button class="edit-code" aria-label="Edit code">edit</button><button class="copy-code" aria-label="Copy code">copy</button></div>';const pre=document.createElement('pre');pre.className='code-preview';pre.textContent=value||'';pre.tabIndex=0;pre.setAttribute('role','button');pre.setAttribute('aria-label','Edit code snippet');c.append(head,pre);head.querySelector('.edit-code').onclick=()=>openCode(el);head.querySelector('.copy-code').onclick=()=>copyCode(el.dataset.payload||'');pre.onclick=()=>openCode(el);pre.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();openCode(el)}}}
+function openCode(el){activeCode=el;$('#codeInput').value=el.dataset.payload||'';openModal('codeModal');requestAnimationFrame(()=>$('#codeInput').focus())}
+function saveCode(){if(!activeCode?.isConnected)return;activeCode.dataset.payload=$('#codeInput').value;activeCode.querySelector('.code-preview').textContent=$('#codeInput').value;save(false)}
+$('#codeInput').addEventListener('input',saveCode);$('#codeInput').onkeydown=e=>{if(e.key==='Tab'&&!e.shiftKey&&!e.altKey&&!e.ctrlKey&&!e.metaKey){e.preventDefault();e.stopPropagation();const input=e.currentTarget;input.setRangeText('  ',input.selectionStart,input.selectionEnd,'end');saveCode()}};
+$('#finishCode').onclick=()=>{saveCode();closeModal('codeModal');activeCode?.querySelector('.edit-code').focus()};$('#copyCodeEditor').onclick=()=>copyCode($('#codeInput').value);codeModal.onclick=e=>{if(e.target===codeModal){saveCode();closeModal('codeModal')}};
+async function copyCode(value){try{if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(value);toast('code copied');return}}catch{}const field=document.createElement('textarea');field.value=value;field.style.cssText='position:fixed;left:-9999px;top:0';document.body.append(field);field.select();let copied=false;try{copied=document.execCommand('copy')}catch{}field.remove();toast(copied?'code copied':'Open the code and select it to copy')}
 
 </script>
 </body>
