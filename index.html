@@ -512,6 +512,8 @@ body{background:#151b27}.notebook-card h2{color:#f0f3fa}.notebook-card p,.notebo
 .book .board[data-paper="dots"]{background:radial-gradient(circle,color-mix(in srgb,var(--accent-ink) 25%,transparent) .7px,transparent 1px) 0 0/20px 20px,var(--paper)}
 .book .board[data-paper="squares"]{background:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px),var(--paper);background-size:20px 20px}
 .book .board[data-paper="lines"]{background:repeating-linear-gradient(to bottom,transparent 0,transparent 27px,var(--grid) 28px,transparent 29px),var(--paper)}
+
+.wallpaper-styles{border:0;padding:0;margin:8px 0 16px}.wallpaper-styles legend{font-size:13px;margin-bottom:9px;color:var(--accent-ink)}.wallpaper-styles>div{display:flex;gap:8px}.wallpaper-styles button{flex:1;border:1px solid var(--line);border-radius:10px;min-height:42px;padding:8px 10px;background:var(--paper);color:var(--ink);font-size:13px}.wallpaper-styles button[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent-ink)}
 </style>
 </head>
 <body>
@@ -1065,10 +1067,10 @@ function showShelf(){save(false);renderShelf();shelf.classList.add('open');$('.a
 function hideShelf(){shelf.classList.remove('open');$('.app').inert=false;shelfTrigger.focus()}
 
 function openNotebook(id){animateNotebookOpen(id)}
-function renderShelf(){const carousel=shelf.querySelector('.notebook-carousel');carousel.replaceChildren();notebookStore.forEach(n=>{const card=document.createElement('article');card.className='notebook-card';card.dataset.notebook=n.id;const cover=document.createElement('button');cover.className='notebook-cover';cover.style.setProperty('--cover',n.color||'#e7ca77');cover.style.backgroundColor=n.color||'#e7ca77';cover.setAttribute('aria-label','Open '+n.name);const img=document.createElement('img');img.src=n.cover||renderCoverWallpaper(n.wallpaperSeed);img.alt='';img.decoding='async';cover.classList.add('wallpaper-cover');cover.append(img);const label=document.createElement('span');label.className='cover-title';label.textContent=n.name;cover.append(label);cover.onclick=()=>openNotebook(n.id);const title=document.createElement('h2');title.textContent=n.name;const count=document.createElement('p');const total=notebookPageCount(n.id);count.textContent=total+' '+(total===1?'page':'pages');const edit=document.createElement('button');edit.textContent='customize cover';edit.onclick=()=>editNotebook(n.id);card.append(cover,title,count,edit);carousel.append(card)})}
-const coverModal=document.createElement('div');coverModal.className='modal';coverModal.id='coverModal';coverModal.setAttribute('role','dialog');coverModal.setAttribute('aria-modal','true');coverModal.setAttribute('aria-label','Notebook cover');coverModal.innerHTML='<div class="sheet"><h3>Your notebook</h3><label for="notebookName">Name</label><input id="notebookName" maxlength="60" placeholder="Little moments"><div class="cover-form-row"><label>Cover color<input id="notebookColor" type="color" value="#9bc9d8"></label><label>Cover emoji<input id="notebookEmoji" maxlength="12" value="🌼"></label></div><label for="notebookCover">Or use a cover photo</label><input id="notebookCover" type="file" accept="image/*"><button class="btn" id="removeCover">remove photo</button><div class="row"><button class="btn" id="cancelCover">cancel</button><button class="btn primary" id="saveCover">save notebook</button></div></div>';document.body.append(coverModal);let editingNotebook=null,pendingCover='',pendingWallpaperSeed=0;
-function editNotebook(id){editingNotebook=id;$('#saveCover').disabled=false;const n=notebookStore.find(x=>x.id===id);$('#notebookName').value=n?.name||'';$('#notebookColor').value=n?.color||['#f0ce78','#91c8df','#c1afe9','#efa98f','#a8d6be','#e9afca'][notebookStore.length%6];$('#notebookEmoji').value=n?.emoji||'🌼';pendingCover=n?.cover||'';pendingWallpaperSeed=n?.wallpaperSeed??newWallpaperSeed();refreshWallpaperPreview();$('#notebookCover').value='';openModal('coverModal')}
-$('#newNotebook').onclick=()=>editNotebook(null);$('#notebookCover').onchange=e=>{const file=e.target.files[0];$('#saveCover').disabled=!!file;readImage(file,data=>{pendingCover=data;refreshWallpaperPreview();$('#saveCover').disabled=false},()=>{$('#saveCover').disabled=false})};$('#removeCover').onclick=()=>{pendingCover='';$('#notebookCover').value='';refreshWallpaperPreview();toast('generated wallpaper restored')};$('#cancelCover').onclick=()=>closeModal('coverModal');coverModal.onclick=e=>{if(e.target===coverModal)closeModal('coverModal')};$('#saveCover').onclick=()=>{const name=$('#notebookName').value.trim();if(!name){$('#notebookName').focus();toast('Give your notebook a name');return}const n={id:editingNotebook||'n'+Date.now().toString(36),name,color:$('#notebookColor').value,emoji:$('#notebookEmoji').value.trim()||'🌼',cover:pendingCover,wallpaperSeed:pendingWallpaperSeed};const before=notebookStore.slice();const index=notebookStore.findIndex(x=>x.id===n.id);if(index>=0)notebookStore[index]=n;else notebookStore.push(n);if(!persistNotebooks()){notebookStore=before;return}closeModal('coverModal');renderShelf();requestAnimationFrame(()=>shelf.querySelector('[data-notebook="'+n.id+'"]')?.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'}))};
+function renderShelf(){const carousel=shelf.querySelector('.notebook-carousel');carousel.replaceChildren();notebookStore.forEach(n=>{const card=document.createElement('article');card.className='notebook-card';card.dataset.notebook=n.id;const cover=document.createElement('button');cover.className='notebook-cover';cover.style.setProperty('--cover',n.color||'#e7ca77');cover.style.backgroundColor=n.color||'#e7ca77';cover.setAttribute('aria-label','Open '+n.name);const img=document.createElement('img');img.src=n.cover||renderCoverWallpaper(n.wallpaperSeed,n.wallpaperStyle);img.alt='';img.decoding='async';cover.classList.add('wallpaper-cover');cover.append(img);const label=document.createElement('span');label.className='cover-title';label.textContent=n.name;cover.append(label);cover.onclick=()=>openNotebook(n.id);const title=document.createElement('h2');title.textContent=n.name;const count=document.createElement('p');const total=notebookPageCount(n.id);count.textContent=total+' '+(total===1?'page':'pages');const edit=document.createElement('button');edit.textContent='customize cover';edit.onclick=()=>editNotebook(n.id);card.append(cover,title,count,edit);carousel.append(card)})}
+const coverModal=document.createElement('div');coverModal.className='modal';coverModal.id='coverModal';coverModal.setAttribute('role','dialog');coverModal.setAttribute('aria-modal','true');coverModal.setAttribute('aria-label','Notebook cover');coverModal.innerHTML='<div class="sheet"><h3>Your notebook</h3><label for="notebookName">Name</label><input id="notebookName" maxlength="60" placeholder="Little moments"><div class="cover-form-row"><label>Cover color<input id="notebookColor" type="color" value="#9bc9d8"></label><label>Cover emoji<input id="notebookEmoji" maxlength="12" value="🌼"></label></div><label for="notebookCover">Or use a cover photo</label><input id="notebookCover" type="file" accept="image/*"><button class="btn" id="removeCover">remove photo</button><div class="row"><button class="btn" id="cancelCover">cancel</button><button class="btn primary" id="saveCover">save notebook</button></div></div>';document.body.append(coverModal);let editingNotebook=null,pendingCover='',pendingWallpaperSeed=0,pendingWallpaperStyle='polygon';
+function editNotebook(id){editingNotebook=id;$('#saveCover').disabled=false;const n=notebookStore.find(x=>x.id===id);$('#notebookName').value=n?.name||'';$('#notebookColor').value=n?.color||['#f0ce78','#91c8df','#c1afe9','#efa98f','#a8d6be','#e9afca'][notebookStore.length%6];$('#notebookEmoji').value=n?.emoji||'🌼';pendingCover=n?.cover||'';pendingWallpaperSeed=n?.wallpaperSeed??newWallpaperSeed();pendingWallpaperStyle=n?.wallpaperStyle==='isometric'?'isometric':'polygon';refreshWallpaperStyle();refreshWallpaperPreview();$('#notebookCover').value='';openModal('coverModal')}
+$('#newNotebook').onclick=()=>editNotebook(null);$('#notebookCover').onchange=e=>{const file=e.target.files[0];$('#saveCover').disabled=!!file;readImage(file,data=>{pendingCover=data;refreshWallpaperPreview();$('#saveCover').disabled=false},()=>{$('#saveCover').disabled=false})};$('#removeCover').onclick=()=>{pendingCover='';$('#notebookCover').value='';refreshWallpaperPreview();toast('generated wallpaper restored')};$('#cancelCover').onclick=()=>closeModal('coverModal');coverModal.onclick=e=>{if(e.target===coverModal)closeModal('coverModal')};$('#saveCover').onclick=()=>{const name=$('#notebookName').value.trim();if(!name){$('#notebookName').focus();toast('Give your notebook a name');return}const n={id:editingNotebook||'n'+Date.now().toString(36),name,color:$('#notebookColor').value,emoji:$('#notebookEmoji').value.trim()||'🌼',cover:pendingCover,wallpaperSeed:pendingWallpaperSeed,wallpaperStyle:pendingWallpaperStyle};const before=notebookStore.slice();const index=notebookStore.findIndex(x=>x.id===n.id);if(index>=0)notebookStore[index]=n;else notebookStore.push(n);if(!persistNotebooks()){notebookStore=before;return}closeModal('coverModal');renderShelf();requestAnimationFrame(()=>shelf.querySelector('[data-notebook="'+n.id+'"]')?.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'}))};
 const notebookLoad=load;load=function(){notebookLoad();refreshPaperOptions();fixLinkSizes()};
 // Use the whole sheet for a decisive swipe, except editable controls and draggable layers.
 swipeZone.addEventListener('touchstart',e=>{if(e.touches.length!==1||e.target.closest('.item,button,input,textarea,a,[contenteditable="true"],.tape-handle,.piece-resize'))return;swipeStartX=e.touches[0].clientX;swipeStartY=e.touches[0].clientY;swipeActive=true},{passive:true});
@@ -1178,7 +1180,8 @@ showShelf=function(){closeNotebookToShelf()};
 // Adapted from the supplied Polygon Wallpaper Generator: seeded portrait mesh,
 // three-color directional gradient, triangle normals and diffuse lighting.
 function newWallpaperSeed(){if(globalThis.crypto?.getRandomValues)return crypto.getRandomValues(new Uint32Array(1))[0];return (Date.now()^Math.floor(Math.random()*4294967296))>>>0}
-function renderCoverWallpaper(seed){
+function renderCoverWallpaper(seed,style='polygon'){
+ if(style==='isometric')return renderIsometricWallpaper(seed);
  const cacheKey='poly1:'+seed;if(wallpaperCache.has(cacheKey))return wallpaperCache.get(cacheKey);
  const random=wallpaperRandom(seed);
  const canvas=document.createElement('canvas');canvas.width=768;canvas.height=1024;const ctx=canvas.getContext('2d',{alpha:false});if(!ctx)throw new Error('Canvas is unavailable');const width=canvas.width,height=canvas.height;
@@ -1193,28 +1196,28 @@ function renderCoverWallpaper(seed){
  const result=canvas.toDataURL('image/jpeg',.92);if(wallpaperCache.size>=24)wallpaperCache.delete(wallpaperCache.keys().next().value);wallpaperCache.set(cacheKey,result);return result;
 }
 
-function refreshWallpaperPreview(){const img=$('#wallpaperPreview');if(img)img.src=pendingCover||renderCoverWallpaper(pendingWallpaperSeed)}
+function refreshWallpaperPreview(){const img=$('#wallpaperPreview');if(img)img.src=pendingCover||renderCoverWallpaper(pendingWallpaperSeed,pendingWallpaperStyle)}
 async function regenerateNotebookWallpaper(id,button){
  if(button.disabled)return;button.disabled=true;const previousLabel=button.innerHTML;button.textContent='rendering…';
  try{
   await new Promise(resolve=>requestAnimationFrame(resolve));
   const n=notebookStore.find(x=>x.id===id);if(!n)return;
   let seed=newWallpaperSeed();if(seed===n.wallpaperSeed)seed=(seed+1)>>>0;
-  const image=renderCoverWallpaper(seed),oldSeed=n.wallpaperSeed,oldCover=n.cover;n.wallpaperSeed=seed;n.cover='';
+  const image=renderCoverWallpaper(seed,n.wallpaperStyle),oldSeed=n.wallpaperSeed,oldCover=n.cover;n.wallpaperSeed=seed;n.cover='';
   if(!persistNotebooks()){n.wallpaperSeed=oldSeed;n.cover=oldCover;return}
   const cover=shelf.querySelector('[data-notebook="'+id+'"] .notebook-cover');const img=cover?.querySelector('img');if(img){img.src=image;if(!matchMedia('(prefers-reduced-motion: reduce)').matches)img.animate([{opacity:.25},{opacity:1}],{duration:240,easing:'ease-out'})}feedback();toast('new cover, same journal')
  }catch{toast('Could not render a cover — try again')}finally{button.disabled=false;button.innerHTML=previousLabel}
 }
 const wallpaperControls=document.createElement('div');wallpaperControls.className='wallpaper-controls';wallpaperControls.innerHTML='<img class="wallpaper-preview" id="wallpaperPreview" alt="Notebook cover preview"><button class="btn" id="regeneratePreview" type="button"></button>';
 $('#coverModal .cover-form-row').before(wallpaperControls);$('#regeneratePreview').innerHTML=icon('rotate')+'<span>new wallpaper</span>';
-$('#regeneratePreview').onclick=async()=>{const button=$('#regeneratePreview');button.disabled=true;try{await new Promise(resolve=>requestAnimationFrame(resolve));let seed=newWallpaperSeed();if(seed===pendingWallpaperSeed)seed=(seed+1)>>>0;renderCoverWallpaper(seed);pendingWallpaperSeed=seed;pendingCover='';$('#notebookCover').value='';refreshWallpaperPreview();feedback()}catch{toast('Could not render a cover — try again')}finally{button.disabled=false}};
+$('#regeneratePreview').onclick=async()=>{const button=$('#regeneratePreview');button.disabled=true;try{await new Promise(resolve=>requestAnimationFrame(resolve));let seed=newWallpaperSeed();if(seed===pendingWallpaperSeed)seed=(seed+1)>>>0;renderCoverWallpaper(seed,pendingWallpaperStyle);pendingWallpaperSeed=seed;pendingCover='';$('#notebookCover').value='';refreshWallpaperPreview();feedback()}catch{toast('Could not render a cover — try again')}finally{button.disabled=false}};
 $('#removeCover').textContent='use generated wallpaper';
 
 function wallpaperRandom(seed){let state=Number(seed)>>>0;return ()=>{state+=0x6D2B79F5;let t=state;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return ((t^(t>>>14))>>>0)/4294967296}}
 function wallpaperPalette(seed){const random=wallpaperRandom(seed);random();random();return Array.from({length:3},()=>[Math.floor(random()*256),Math.floor(random()*256),Math.floor(random()*256)])}
 function applyGeneratedPalette(){
  const n=notebookStore.find(x=>x.id===activeNotebook);if(!n)return;
- const [first,second,third]=wallpaperPalette(n.wallpaperSeed);
+ const [first,second,third]=generatedCoverPalette(n.wallpaperSeed,n.wallpaperStyle);
  const mix=(a,b,t)=>a.map((v,i)=>Math.round(v+(b[i]-v)*t)),white=[255,255,255],black=[14,20,30],rgb=c=>'rgb('+c.join(',')+')';
  const tokens={'--accent':first,'--binding':first,'--accent-soft':mix(first,white,.84),'--accent-ink':mix(first,black,.62),'--paper':mix(second,white,.975),'--page-tint':mix(second,white,.95),'--panel':mix(first,white,.94),'--note':mix(second,white,.66),'--wash':mix(third,white,.43),'--grid':mix(first,white,.82),'--line':mix(first,white,.79),'--ink':mix(first,black,.9),'--muted':mix(first,black,.58),'--ribbon':third};
  Object.entries(tokens).forEach(([name,value])=>document.body.style.setProperty(name,rgb(value)));document.body.dataset.theme='generated';
@@ -1222,6 +1225,42 @@ function applyGeneratedPalette(){
 homeColors.remove();mobileThemes.remove();$('.theme-picker')?.remove();
 const saveCoverWithPalette=$('#saveCover').onclick;$('#saveCover').onclick=()=>{saveCoverWithPalette();if(!$('#coverModal').classList.contains('open'))applyGeneratedPalette()};
 applyGeneratedPalette();
+
+// Seeded adaptation of the supplied Isocube Generator, retaining its nine palette strategies.
+function isometricSpec(seed){
+ const random=wallpaperRandom(seed),baseHue=random()*360,strategy=Math.floor(random()*9),count=6+Math.floor(random()*5),colors=[];
+ const hex=(h,s,l)=>{h=((h%360)+360)%360;s/=100;l/=100;const a=s*Math.min(l,1-l);const channel=n=>{const k=(n+h/30)%12;return Math.round(255*(l-a*Math.max(Math.min(k-3,9-k,1),-1))).toString(16).padStart(2,'0')};return '#'+channel(0)+channel(8)+channel(4)};
+ for(let i=0;i<count;i++){let h,s,l;switch(strategy){
+ case 0:h=(baseHue+i*25+random()*15)%360;s=55+random()*40;l=40+random()*35;break;
+ case 1:h=(baseHue+(i%3)*120+random()*30)%360;s=55+random()*40;l=40+random()*35;break;
+ case 2:h=(baseHue+(i%2)*180+random()*40-20)%360;s=55+random()*40;l=40+random()*35;break;
+ case 3:h=(baseHue+i*51+random()*20)%360;s=60+random()*35;l=40+random()*30;break;
+ case 4:h=random()*360;s=55+random()*40;l=40+random()*35;break;
+ case 5:h=[280,320,180,200,60,140,0][i%7]+random()*20;s=80+random()*20;l=i<3?12+random()*12:50+random()*25;break;
+ case 6:h=(240+i*30+random()*20)%360;s=70+random()*30;l=i%3===0?10+random()*10:45+random()*30;break;
+ case 7:h=[120,300,180,60,330,200,0][i%7]+random()*15;s=85+random()*15;l=i<2?6+random()*8:40+random()*30;break;
+ default:h=[350,30,270,200,170,310,45][i%7]+random()*20;s=75+random()*25;l=i<2?8+random()*10:45+random()*25;
+ }colors.push(hex(h,s,l))}
+ return {colors,cubeSize:60+Math.floor(random()*91),random,strategy};
+}
+function renderIsometricWallpaper(seed){
+ const key='iso1:'+seed;if(wallpaperCache.has(key))return wallpaperCache.get(key);
+ const {colors,cubeSize,random}=isometricSpec(seed),canvas=document.createElement('canvas');canvas.width=768;canvas.height=1024;const ctx=canvas.getContext('2d',{alpha:false});if(!ctx)throw new Error('Canvas is unavailable');
+ const shade=(hex,factor)=>'rgb('+[1,3,5].map(i=>Math.max(0,Math.min(255,Math.round(parseInt(hex.slice(i,i+2),16)*factor)))).join(',')+')';const pick=()=>colors[Math.floor(random()*colors.length)];
+ const w=canvas.width,h=canvas.height,edge=cubeSize*w/1920,hx=edge*Math.sqrt(3)/2,colW=edge*Math.sqrt(3),rowH=edge*1.5,p=.5,cols=Math.ceil(w/colW)+3,rows=Math.ceil(h/rowH)+3;
+ ctx.fillStyle=shade(colors[0],.3);ctx.fillRect(0,0,w,h);
+ const face=(points,color)=>{ctx.beginPath();ctx.moveTo(...points[0]);for(const point of points.slice(1))ctx.lineTo(...point);ctx.closePath();ctx.fillStyle=color;ctx.fill()};
+ for(let row=-2;row<rows;row++)for(let col=-2;col<cols;col++){const cx=col*colW+(row%2===0?0:hx),cy=row*rowH,top=pick(),left=pick(),right=pick();
+ face([[cx,cy-edge-p],[cx+hx+p,cy-edge/2],[cx,cy+p],[cx-hx-p,cy-edge/2]],top);
+ face([[cx-hx-p,cy-edge/2-p],[cx+p,cy],[cx+p,cy+edge+p],[cx-hx-p,cy+edge/2+p]],shade(left,.92));
+ face([[cx+hx+p,cy-edge/2-p],[cx-p,cy],[cx-p,cy+edge+p],[cx+hx+p,cy+edge/2+p]],shade(right,.85));
+ }
+ const image=canvas.toDataURL('image/jpeg',.94);if(wallpaperCache.size>=24)wallpaperCache.delete(wallpaperCache.keys().next().value);wallpaperCache.set(key,image);return image;
+}
+function generatedCoverPalette(seed,style){if(style!=='isometric')return wallpaperPalette(seed);return isometricSpec(seed).colors.slice(0,3).map(hex=>[1,3,5].map(i=>parseInt(hex.slice(i,i+2),16)))}
+function refreshWallpaperStyle(){document.querySelectorAll('[data-wallpaper-style]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.wallpaperStyle===pendingWallpaperStyle)))}
+const wallpaperStyles=document.createElement('fieldset');wallpaperStyles.className='wallpaper-styles';wallpaperStyles.innerHTML='<legend>Wallpaper style</legend><div><button type="button" data-wallpaper-style="polygon">Polygons</button><button type="button" data-wallpaper-style="isometric">Isometric cubes</button></div>';
+wallpaperControls.before(wallpaperStyles);wallpaperStyles.querySelectorAll('button').forEach(button=>button.onclick=()=>{try{const style=button.dataset.wallpaperStyle;renderCoverWallpaper(pendingWallpaperSeed,style);pendingWallpaperStyle=style;pendingCover='';$('#notebookCover').value='';refreshWallpaperPreview();refreshWallpaperStyle();feedback()}catch{toast('Could not render this style — try again')}});
 
 </script>
 </body>
