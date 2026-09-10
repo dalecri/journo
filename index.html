@@ -647,6 +647,72 @@ body{background:#151b27}.notebook-card h2{color:#f0f3fa}.notebook-card p,.notebo
 <div class="toast" id="toast">saved</div>
 
 <script>
+// ---- IndexedDB-backed replacement for localStorage ----
+// Everything below writes through an in-memory cache (kept in sync) so all the
+// original code can keep calling localStorage.getItem/setItem/key/length exactly
+// as before; the cache is persisted to IndexedDB in the background, and hydrated
+// from IndexedDB once, before any app code runs.
+const IDB_DB_NAME='softleaf-kv',IDB_STORE_NAME='kv';
+function idbOpenDb(){
+  return new Promise((resolve,reject)=>{
+    if(!('indexedDB' in window)){reject(new Error('IndexedDB unavailable'));return}
+    const req=indexedDB.open(IDB_DB_NAME,1);
+    req.onupgradeneeded=()=>{if(!req.result.objectStoreNames.contains(IDB_STORE_NAME))req.result.createObjectStore(IDB_STORE_NAME)};
+    req.onsuccess=()=>resolve(req.result);
+    req.onerror=()=>reject(req.error);
+  });
+}
+function idbReadAll(db){
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction(IDB_STORE_NAME,'readonly'),store=tx.objectStore(IDB_STORE_NAME);
+    const keysReq=store.getAllKeys(),valsReq=store.getAll();
+    let keys=null,vals=null;
+    function done(){if(keys&&vals)resolve(keys.map((k,i)=>[k,vals[i]]))}
+    keysReq.onsuccess=()=>{keys=keysReq.result;done()};
+    valsReq.onsuccess=()=>{vals=valsReq.result;done()};
+    tx.onerror=()=>reject(tx.error);
+  });
+}
+function idbWrite(db,k,v){
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction(IDB_STORE_NAME,'readwrite');
+    tx.objectStore(IDB_STORE_NAME).put(v,k);
+    tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error);
+  });
+}
+function idbRemove(db,k){
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction(IDB_STORE_NAME,'readwrite');
+    tx.objectStore(IDB_STORE_NAME).delete(k);
+    tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error);
+  });
+}
+function idbClearAll(db){
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction(IDB_STORE_NAME,'readwrite');
+    tx.objectStore(IDB_STORE_NAME).clear();
+    tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error);
+  });
+}
+async function createIndexedDbStorage(){
+  let db=null;
+  try{db=await idbOpenDb()}catch(err){console.error('Softleaf: IndexedDB unavailable, journal will not persist across visits.',err)}
+  const cache=new Map();
+  if(db){
+    try{for(const [k,v] of await idbReadAll(db))cache.set(k,v)}catch(err){console.error('Softleaf: could not read saved journal data.',err)}
+  }
+  const shim={
+    getItem(k){return cache.has(k)?cache.get(k):null},
+    setItem(k,v){v=String(v);cache.set(k,v);if(db)idbWrite(db,k,v).catch(err=>console.error('Softleaf: write failed, this change may not be saved.',err))},
+    removeItem(k){cache.delete(k);if(db)idbRemove(db,k).catch(err=>console.error('Softleaf: delete failed.',err))},
+    clear(){cache.clear();if(db)idbClearAll(db).catch(err=>console.error('Softleaf: clear failed.',err))},
+    key(i){return [...cache.keys()][i]??null}
+  };
+  Object.defineProperty(shim,'length',{get(){return cache.size}});
+  return shim;
+}
+(async function(){
+const localStorage=await createIndexedDbStorage();
 var widgetCanvasObserver,widgetDrawers=new Map();
 var wallpaperCache=new Map();
 var notebookStore;try{notebookStore=JSON.parse(localStorage.getItem('softleaf-notebooks')||'null')}catch{}
@@ -1394,6 +1460,7 @@ board.addEventListener('pointerdown',e=>{const el=e.target.closest('.item,.place
 board.addEventListener('focusin',e=>{const el=e.target.closest('.item,.placed');if(el)selectItem(el)});
 refreshNotebookPaper();
 
+})();
 </script>
 </body>
 </html>
