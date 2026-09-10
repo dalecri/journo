@@ -438,14 +438,14 @@ svg.icon{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.6;s
 
 
 /* Quiet desk, clean notebook */
-body[data-theme="bluebell"]{--desk:#192c36;--desk-glow:#314958}
-body[data-theme="lavender"]{--desk:#292333;--desk-glow:#484056}
-body[data-theme="peach"]{--desk:#352923;--desk-glow:#564039}
-body[data-theme="sage"]{--desk:#202e28;--desk-glow:#3c4c3d}
-body[data-theme="rose"]{--desk:#34252d;--desk-glow:#533c47}
-body[data-theme="butter"]{--desk:#302d21;--desk-glow:#4d4933}
-body[data-theme="mint"]{--desk:#1d302d;--desk-glow:#34514a}
-body[data-theme="cloud"]{--desk:#242a33;--desk-glow:#3e4959}
+body[data-theme="bluebell"]{--desk:#101d3b;--desk-glow:#253e6a}
+body[data-theme="lavender"]{--desk:#211b3d;--desk-glow:#40345e}
+body[data-theme="peach"]{--desk:#172440;--desk-glow:#304b70}
+body[data-theme="sage"]{--desk:#102f36;--desk-glow:#24515a}
+body[data-theme="rose"]{--desk:#301c3c;--desk-glow:#563254}
+body[data-theme="butter"]{--desk:#101c36;--desk-glow:#263d67}
+body[data-theme="mint"]{--desk:#102c38;--desk-glow:#225064}
+body[data-theme="cloud"]{--desk:#18253b;--desk-glow:#354b6a}
 body{background:radial-gradient(ellipse at 50% 38%,var(--desk-glow),var(--desk) 78%);transition:background-color .3s}
 .day-rail{display:none!important}.bookwrap{padding-left:0!important}.layout{padding:20px 25px 66px}.bookwrap{max-width:1280px}.book{box-shadow:2px 3px 0 var(--paper),4px 5px 0 var(--binding),0 24px 60px #0005}
 .mobile-nav{background:transparent;border:0;box-shadow:none;backdrop-filter:none;padding:0;bottom:max(10px,env(safe-area-inset-bottom));gap:32px}.mobile-nav button{color:#f4f0de99;background:transparent!important;min-width:40px;min-height:38px}.mobile-nav button:hover{color:#fff}.mobile-nav svg{width:18px;height:18px}.mobile-nav #soundToggle,.mobile-nav #chooseDate{display:none!important}
@@ -471,10 +471,37 @@ body>.theme-picker{position:fixed;left:20px;right:auto;top:auto;bottom:max(16px,
 .unframed{padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;min-width:70px;min-height:60px}.unframed img{border-radius:3px}
 .calendaritem,.weekitem{background:var(--paper);border:1px solid var(--line);border-radius:7px;padding:12px;min-width:210px;min-height:180px}.weekitem{min-height:70px}.calendaritem .content,.weekitem .content{display:flex;flex-direction:column;gap:9px}.widget-heading{display:flex;align-items:center;justify-content:space-between;font-size:12px;gap:8px}.widget-heading button{background:transparent;border:0;min-width:30px;min-height:30px}.widget-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;font-size:10px;text-align:center}.widget-grid button{background:transparent;border:0;border-radius:50%;height:25px;min-width:0;font-size:11px;padding:0}.widget-grid button.current{background:var(--accent-soft);color:var(--accent-ink)}.weekitem .widget-grid button{height:34px;border-radius:6px}.paper-options{display:flex;gap:6px;margin:12px 0;flex-wrap:wrap}.paper-options button{border:1px solid var(--line);background:var(--paper);border-radius:8px;min-height:38px;padding:7px 10px;font-size:12px}.paper-options button.active{background:var(--accent-soft)}
 .shelf-trigger{position:absolute;top:14px;left:14px;z-index:65;background:transparent;border:0;color:var(--accent-ink);width:28px;height:28px;padding:3px;opacity:.55}.shelf-trigger:hover{opacity:1}
-.notebook-shelf{position:fixed;inset:0;z-index:110;background:radial-gradient(ellipse at 50% 30%,#4d4939,#24251f);color:#f5f2df;display:none;flex-direction:column;padding:max(22px,env(safe-area-inset-top)) 0 max(18px,env(safe-area-inset-bottom));overflow:hidden}.notebook-shelf.open{display:flex}.shelf-heading{display:flex;align-items:center;justify-content:space-between;padding:0 24px;gap:12px}.shelf-heading h1{font-size:20px;font-weight:500}.shelf-heading button{border:1px solid #ffffff30;background:#ffffff0c;border-radius:50%;color:inherit;width:42px;height:42px}.notebook-carousel{display:flex;align-items:center;gap:40px;flex:1;min-height:0;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;padding:30px max(28px,calc((100vw - 320px)/2));scrollbar-width:none}.notebook-card{flex:0 0 300px;max-width:75vw;scroll-snap-align:center;text-align:center}.notebook-cover{position:relative;width:100%;aspect-ratio:3/4;max-height:58dvh;border:0;border-radius:5px 23px 23px 5px;background:var(--cover);box-shadow:inset 10px 0 0 #0000000c,inset 16px 0 0 #ffffff18,7px 8px 0 #ece6d3,10px 12px 30px #0005;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;color:#333a37;cursor:pointer;padding:30px}.notebook-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.cover-emoji{font-size:64px;position:relative}.cover-title{position:relative;border:1px solid #333a3750;background:#fff9;padding:12px 18px;font-size:16px;line-height:1.5;max-width:95%;overflow-wrap:anywhere}.notebook-card h2{font-size:16px;margin:25px 0 5px;font-weight:500}.notebook-card p{font-size:12px;color:#d4d0bc}.notebook-card>button{background:transparent;border:0;color:#d4d0bc;text-decoration:underline;text-underline-offset:4px;font-size:12px;min-height:36px}.shelf-hint{font-size:12px;text-align:center;color:#b4b19d;margin:0}.cover-form-row{display:flex;gap:12px}.cover-form-row label{flex:1}.cover-form-row input[type=color]{height:44px}.modal{z-index:130}
+.notebook-shelf{position:fixed;inset:0;z-index:110;background:radial-gradient(ellipse at 50% 25%,var(--desk-glow),var(--desk) 78%);color:#edf2ff;display:none;flex-direction:column;padding:max(22px,env(safe-area-inset-top)) 0 max(18px,env(safe-area-inset-bottom));overflow:hidden}.notebook-shelf.open{display:flex}.shelf-heading{display:flex;align-items:center;justify-content:space-between;padding:0 24px;gap:12px}.shelf-heading h1{font-size:20px;font-weight:500}.shelf-heading button{border:1px solid #ffffff30;background:#ffffff0c;border-radius:50%;color:inherit;width:42px;height:42px}.notebook-carousel{display:flex;align-items:center;gap:40px;flex:1;min-height:0;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;padding:30px max(28px,calc((100vw - 320px)/2));scrollbar-width:none}.notebook-card{flex:0 0 300px;max-width:75vw;scroll-snap-align:center;text-align:center}.notebook-cover{position:relative;width:100%;aspect-ratio:3/4;max-height:58dvh;border:0;border-radius:5px 23px 23px 5px;background:var(--cover);box-shadow:inset 10px 0 0 #0000000c,inset 16px 0 0 #ffffff18,7px 8px 0 #ece6d3,10px 12px 30px #0005;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;color:#333a37;cursor:pointer;padding:30px}.notebook-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.cover-emoji{font-size:64px;position:relative}.cover-title{position:relative;border:1px solid #333a3750;background:#fff9;padding:12px 18px;font-size:16px;line-height:1.5;max-width:95%;overflow-wrap:anywhere}.notebook-card h2{font-size:16px;margin:25px 0 5px;font-weight:500}.notebook-card p{font-size:12px;color:#d4d0bc}.notebook-card>button:not(.notebook-cover){background:transparent;border:0;color:#d4d0bc;text-decoration:underline;text-underline-offset:4px;font-size:12px;min-height:36px}.shelf-hint{font-size:12px;text-align:center;color:#b4b19d;margin:0}.cover-form-row{display:flex;gap:12px}.cover-form-row label{flex:1}.cover-form-row input[type=color]{height:44px}.modal{z-index:130}
 .flip-sheet.next.active{animation:paperForward .66s linear forwards}.flip-sheet.prev.active{animation:paperBackward .66s linear forwards}.flip-face{backface-visibility:hidden;-webkit-backface-visibility:hidden}
 @media(min-width:601px) and (max-width:1366px){.mobile-nav,body>.theme-picker{display:none!important}.layout{padding:18px 20px;height:100dvh}.mobile-themes{display:flex}.book{border-radius:14px;box-shadow:0 14px 40px #0003}.bookwrap{height:100%}}
 @media(max-width:600px){.layout{padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}.shelf-trigger{top:10px;left:6px;width:23px}.notebook-carousel{gap:30px}.notebook-card{flex-basis:260px}.notebook-cover{max-height:55dvh}.placed.dayline{left:10%!important}.flip-sheet{width:100%!important}}
+
+
+/* Clear separation between rich desk colors and the lighter book covers. */
+.notebook-cover{background:color-mix(in srgb,var(--cover) 88%,#fff 12%);outline:1px solid #ffffff50;box-shadow:inset 10px 0 0 #14243b14,inset 16px 0 0 #ffffff2b,6px 7px 0 #f0eadf,0 20px 40px #030b1d70}
+.notebook-card h2{color:#f1f5ff}.notebook-card p,.notebook-card>button:not(.notebook-cover){color:#b9c8e0}.shelf-hint{color:#9eb0cc}.shelf-heading button{border-color:#b8cbea35;background:#afc8f00c;color:#eaf1ff}.shelf-heading button:hover{background:#afc8f022}
+.cover-title{background:#fff8e8dd;color:#28374a;border-color:#35476735;box-shadow:0 2px 7px #22344b12}.notebook-cover:focus-visible{outline:3px solid #dae8ff;outline-offset:8px}
+
+
+/* Frosted writing paper and quiet copy affordances. */
+.writing-card{background:color-mix(in srgb,var(--paper) 46%,transparent);backdrop-filter:blur(14px) saturate(.8);-webkit-backdrop-filter:blur(14px) saturate(.8);box-shadow:inset 0 1px 0 #ffffff75,0 4px 16px #2030440b;border-color:color-mix(in srgb,var(--accent-ink) 45%,transparent)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.writing-card{background:color-mix(in srgb,var(--paper) 92%,transparent)}}
+.quick-copy{display:inline-grid;place-items:center;flex:none;border:0;border-radius:7px;width:30px;height:30px;min-width:30px;min-height:30px;background:color-mix(in srgb,var(--paper) 72%,transparent);color:var(--accent-ink);opacity:.7;padding:5px;cursor:pointer;touch-action:manipulation;z-index:25}.quick-copy:hover,.quick-copy:focus-visible{opacity:1;background:var(--paper)}.quick-copy svg{width:17px;height:17px}.quick-copy.floating-copy{position:absolute;right:4px;top:4px}.note,.gridnote,.textitem{padding-right:36px}.note .quick-copy,.gridnote .quick-copy,.textitem .quick-copy{background:#ffffff55}.photo-card>.quick-copy{top:auto;bottom:4px;right:3px;width:26px;height:26px;min-width:26px;min-height:26px}.photo-card .caption{padding-right:24px}.todo-head .quick-copy{margin-left:auto}.code-controls .copy-code{width:30px;padding:4px;display:grid;place-items:center}.code-controls .copy-code svg{width:16px;height:16px}.copy-field-wrap{position:relative;display:flex;flex-direction:column;min-height:0}.copy-field-wrap textarea{padding-right:42px!important}.copy-field-wrap .quick-copy{top:9px;right:7px}.code-editor-sheet .copy-field-wrap{flex:1}.code-editor-sheet .copy-field-wrap textarea{height:100%;margin-bottom:10px}.opening-overlay{position:fixed;inset:0;z-index:125;perspective:1800px;overflow:hidden;pointer-events:auto}.opening-cover{position:absolute!important;margin:0!important;max-width:none!important;max-height:none!important;aspect-ratio:auto!important;transform-origin:left center;backface-visibility:hidden;-webkit-backface-visibility:hidden;will-change:transform;pointer-events:none!important}.opening-cover:after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,#07112433,transparent 16%);pointer-events:none}
+
+
+.placed.piece-hidden{display:none!important}.piece-remove{position:absolute;right:-8px;top:-9px;z-index:28;width:22px;height:22px;background:var(--paper);color:var(--accent-ink);border:1px solid var(--line);border-radius:50%;padding:3px;display:none}.piece-remove svg{width:14px;height:14px}.placed:hover .piece-remove,.placed:focus-within .piece-remove{display:grid;place-items:center}
+#prompt:empty:before{content:'a little thought…';color:var(--muted)}#caption:empty:before{content:'add a caption';color:var(--muted)}
+.home-colors{display:flex;align-items:center;justify-content:center;gap:12px;padding:14px 20px 8px;flex-wrap:wrap}.home-colors-label{font-size:12px;color:#bfcee5;margin-right:3px}.home-color{border:2px solid transparent;border-radius:50%;width:27px;height:27px;padding:0;position:relative;background:var(--swatch);box-shadow:0 0 0 1px #ffffff25}.home-color[aria-pressed="true"]{border-color:#f6f7ff;box-shadow:0 0 0 3px #ffffff22}.home-color:focus-visible{outline:2px solid white;outline-offset:5px}.home-color-name{font-size:12px;min-width:65px;color:#dce6fa}.home-colors-label{flex-basis:auto}
+.opening-scene{position:absolute;transform-origin:0 0;perspective:2000px;transform-style:preserve-3d;will-change:transform}.opening-page{position:absolute;inset:0;border-radius:10px;overflow:hidden;box-shadow:0 8px 22px #0003;background:var(--paper)}.opening-hinge{position:absolute;top:0;bottom:0;right:0;width:50%;transform-origin:left center;transform-style:preserve-3d;will-change:transform}.opening-hinge .opening-cover{inset:0!important;width:100%!important;height:100%!important;border-radius:5px 18px 18px 5px;transform:none!important;box-shadow:none}.opening-inside{position:absolute;inset:0;background:var(--paper);transform:rotateY(180deg);backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:16px 0 0 16px;box-shadow:inset -12px 0 20px #0000000c}.opening-hinge.single{width:100%}.notebook-shelf{will-change:opacity}.opening-page .board{display:block!important;position:absolute!important;inset:0!important;width:100%!important;height:100%!important;pointer-events:none}
+@media(max-width:600px){.home-colors{gap:9px;padding:12px 15px}.home-color{width:25px;height:25px}.home-colors-label{flex-basis:100%;text-align:center}.notebook-carousel{padding-top:12px;padding-bottom:12px}}
+
+.add-menu{max-height:calc(100dvh - 130px);overflow:auto;overscroll-behavior:contain}.opening-page{z-index:0}.opening-hinge{z-index:2}.opening-inside{overflow:hidden}
+
+.writing-card>.editor{flex:1;min-height:0!important;width:100%;padding:0;margin:0;overflow:hidden;column-fill:auto;column-gap:32px;column-count:auto;column-width:300px;font:16px/1.85 var(--mono);color:var(--ink);white-space:pre-wrap;overflow-wrap:anywhere;background:none;outline:none;caret-color:var(--accent-ink);touch-action:manipulation}
+.writing-card>.editor:empty:before{content:attr(data-placeholder);color:#788887;pointer-events:none}.writing-card>.editor>div,.writing-card>.editor>p{margin:0;break-inside:auto}.writing-card .writing-pages{gap:2px}.writing-card{min-height:90px!important}
+
+
+.notebook-cover.wallpaper-cover{justify-content:flex-end;padding:25px}.wallpaper-cover .cover-title{margin-top:auto;background:#fff9edf0;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font-size:15px;border:1px solid #ffffff90;box-shadow:0 4px 18px #0b15342e}.notebook-cover>img{transition:opacity .2s}.notebook-card>.regenerate-wallpaper{display:inline-flex;align-items:center;justify-content:center;gap:7px;text-decoration:none;border:1px solid #b7c9e037;border-radius:20px;padding:7px 12px;margin:4px 6px;min-height:36px;color:#e2ebfc;background:#c2d7ff0c}.regenerate-wallpaper svg{width:15px;height:15px}.regenerate-wallpaper:disabled{opacity:.5}.notebook-card>button:not(.notebook-cover):not(.regenerate-wallpaper){display:block;margin:0 auto;font-size:11px}.wallpaper-controls{display:flex;align-items:center;gap:18px;margin:12px 0 18px}.wallpaper-preview{width:120px;height:160px;object-fit:cover;border-radius:4px 12px 12px 4px;box-shadow:3px 4px 0 #dfd8c1,0 5px 18px #1c2a421a;flex:none}.wallpaper-controls .btn{display:flex;align-items:center;gap:8px}.cover-form-row{display:none}.notebook-cover.opening-cover .cover-title{margin-top:auto}
 
 </style>
 </head>
@@ -582,15 +609,17 @@ body>.theme-picker{position:fixed;left:20px;right:auto;top:auto;bottom:max(16px,
 <div class="toast" id="toast">saved</div>
 
 <script>
+var wallpaperCache=new Map();
 var notebookStore;try{notebookStore=JSON.parse(localStorage.getItem('softleaf-notebooks')||'null')}catch{}
 if(!Array.isArray(notebookStore)||!notebookStore.length)notebookStore=[{id:'original',name:'Little moments',color:'#e7ca77',emoji:'🌼',cover:''}];
+notebookStore.forEach(n=>{if(!Number.isInteger(n.wallpaperSeed))n.wallpaperSeed=newWallpaperSeed()});
 var activeNotebook=localStorage.getItem('softleaf-active-notebook')||'original';if(!notebookStore.some(n=>n.id===activeNotebook))activeNotebook=notebookStore[0].id;
 
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const editor=$('#editor'), heroPhoto=$('#heroPhoto'), caption=$('#caption'), promptEl=$('#prompt'), board=$('#board');
 let selected=iso(new Date()), selectedItem=null, pendingPhoto=false, zCounter=10;
 
-const defaults={prompt:"I slow down to hear the flowers bloom and feel the gentle touch of the breeze.",caption:"A little moment worth keeping.",body:"",location:"",favorite:false,heroPhoto:"",boardGrid:false,items:[],todos:[],theme:"butter"};
+const defaults={prompt:"",caption:"",body:"",location:"",favorite:false,heroPhoto:"",boardGrid:false,items:[],todos:[],theme:"butter"};
 const art=`data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 900"><defs><linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#cbeeff"/><stop offset=".62" stop-color="#eef9ff"/></linearGradient></defs><rect width="700" height="900" fill="url(#s)"/><circle cx="105" cy="120" r="43" fill="#fff1a8"/><path d="M0 620 Q175 565 350 620 T700 610 V900 H0Z" fill="#74c8e6"/><path d="M0 660 Q170 620 350 655 T700 650 V900 H0Z" fill="#3291b9"/><path d="M0 720 Q150 650 340 720 T700 700 V900 H0Z" fill="#4fa05f"/><g fill="#f7d34a">${Array.from({length:55},(_,i)=>`<circle cx="${(i*83)%690}" cy="${710+(i*37)%180}" r="${5+(i%4)}"/>`).join('')}</g><path d="M347 555 q18-30 35 0 v82 h-34z" fill="#e77748"/><circle cx="364" cy="532" r="17" fill="#e5a071"/></svg>`)}`;
 
 function iso(d){return [d.getFullYear(),String(d.getMonth()+1).padStart(2,'0'),String(d.getDate()).padStart(2,'0')].join('-')}
@@ -606,8 +635,8 @@ $$('[data-close]').forEach(b=>b.onclick=()=>closeModal(b.dataset.close));
 
 function save(show=true){
   const e=getEntry();
-  Object.assign(e,{body:editor.innerHTML,caption:caption.innerText.trim(),prompt:promptEl.innerText.trim(),items:serializeItems(),paper:board.dataset.paper||'dots',boardGrid:board.classList.contains('gridbg'),todos:readTodos(),placements:typeof capturePlacements==='function'?capturePlacements():e.placements});
-  if(setEntry(e)&&show)toast('saved')
+  Object.assign(e,{body:editor.innerHTML,caption:caption.innerText.trim(),prompt:promptEl.innerText.trim(),enabledPieces:typeof enabledPagePieces==='function'?enabledPagePieces():e.enabledPieces,items:serializeItems(),paper:board.dataset.paper||'dots',boardGrid:board.classList.contains('gridbg'),todos:readTodos(),placements:typeof capturePlacements==='function'?capturePlacements():e.placements});
+  if(setEntry(e)){localStorage.setItem('softleaf-last-date:'+activeNotebook,selected);if(show)toast('saved')}
 }
 function serializeItems(){
   return [...board.querySelectorAll('.item')].map(el=>({
@@ -1021,21 +1050,156 @@ board.addEventListener('pointerdown',e=>{const el=e.target.closest('.placed,.ite
 board.addEventListener('focusin',e=>{const el=e.target.closest('.placed,.item');if(el){bringToTop(el);save(false)}});
 // Links keep their authored dimensions on every device and have no resize affordance.
 function fixLinkSizes(){board.querySelectorAll('.linkitem').forEach(el=>{el.querySelector('.resize')?.remove();const o=getEntry().items?.find(x=>x.id===el.dataset.id);if(o){el.style.width=o.w+'px';el.style.height=o.h+'px'}})}
-const shelf=document.createElement('section');shelf.className='notebook-shelf';shelf.setAttribute('aria-label','Your notebooks');shelf.innerHTML='<div class="shelf-heading"><h1>My journos</h1><div><button id="newNotebook" aria-label="New notebook">＋</button><button id="closeShelf" aria-label="Back to notebook">×</button></div></div><div class="notebook-carousel"></div><p class="shelf-hint">swipe through · tap a cover to open</p>';document.body.append(shelf);
+const shelf=document.createElement('section');shelf.className='notebook-shelf';shelf.setAttribute('aria-label','Your notebooks');shelf.innerHTML='<div class="shelf-heading"><h1>My journos</h1><div><button id="newNotebook" aria-label="New notebook">＋</button></div></div><div class="notebook-carousel"></div><p class="shelf-hint">swipe through · tap a cover to open</p>';document.body.append(shelf);
 const shelfTrigger=document.createElement('button');shelfTrigger.className='shelf-trigger';iconButton(shelfTrigger,'note','My notebooks');$('.bookwrap').append(shelfTrigger);shelfTrigger.onclick=()=>showShelf();
-function showShelf(){save(false);renderShelf();shelf.classList.add('open');$('.app').inert=true;shelf.querySelector('#closeShelf').focus();const active=shelf.querySelector('[data-notebook="'+activeNotebook+'"]');requestAnimationFrame(()=>active?.scrollIntoView({block:'nearest',inline:'center'}))}
+function showShelf(){save(false);renderShelf();shelf.classList.add('open');$('.app').inert=true;shelf.querySelector('#newNotebook').focus();const active=shelf.querySelector('[data-notebook="'+activeNotebook+'"]');requestAnimationFrame(()=>active?.scrollIntoView({block:'nearest',inline:'center'}))}
 function hideShelf(){shelf.classList.remove('open');$('.app').inert=false;shelfTrigger.focus()}
-$('#closeShelf').onclick=hideShelf;
-function openNotebook(id){save(false);activeNotebook=id;persistNotebooks();selected=iso(new Date());load();hideShelf();feedback(true)}
-function renderShelf(){const carousel=shelf.querySelector('.notebook-carousel');carousel.replaceChildren();notebookStore.forEach(n=>{const card=document.createElement('article');card.className='notebook-card';card.dataset.notebook=n.id;const cover=document.createElement('button');cover.className='notebook-cover';cover.style.setProperty('--cover',n.color);cover.setAttribute('aria-label','Open '+n.name);if(n.cover){const img=document.createElement('img');img.src=n.cover;img.alt='';cover.append(img)}else{const emoji=document.createElement('span');emoji.className='cover-emoji';emoji.textContent=n.emoji||'🌼';cover.append(emoji)}const label=document.createElement('span');label.className='cover-title';label.textContent=n.name;cover.append(label);cover.onclick=()=>openNotebook(n.id);const title=document.createElement('h2');title.textContent=n.name;const count=document.createElement('p');const total=notebookPageCount(n.id);count.textContent=total+' '+(total===1?'page':'pages');const edit=document.createElement('button');edit.textContent='customize cover';edit.onclick=()=>editNotebook(n.id);card.append(cover,title,count,edit);carousel.append(card)})}
-const coverModal=document.createElement('div');coverModal.className='modal';coverModal.id='coverModal';coverModal.setAttribute('role','dialog');coverModal.setAttribute('aria-modal','true');coverModal.setAttribute('aria-label','Notebook cover');coverModal.innerHTML='<div class="sheet"><h3>Your notebook</h3><label for="notebookName">Name</label><input id="notebookName" maxlength="60" placeholder="Little moments"><div class="cover-form-row"><label>Cover color<input id="notebookColor" type="color" value="#9bc9d8"></label><label>Cover emoji<input id="notebookEmoji" maxlength="12" value="🌼"></label></div><label for="notebookCover">Or use a cover photo</label><input id="notebookCover" type="file" accept="image/*"><button class="btn" id="removeCover">remove photo</button><div class="row"><button class="btn" id="cancelCover">cancel</button><button class="btn primary" id="saveCover">save notebook</button></div></div>';document.body.append(coverModal);let editingNotebook=null,pendingCover='';
-function editNotebook(id){editingNotebook=id;$('#saveCover').disabled=false;const n=notebookStore.find(x=>x.id===id);$('#notebookName').value=n?.name||'';$('#notebookColor').value=n?.color||'#9bc9d8';$('#notebookEmoji').value=n?.emoji||'🌼';pendingCover=n?.cover||'';$('#notebookCover').value='';openModal('coverModal')}
-$('#newNotebook').onclick=()=>editNotebook(null);$('#notebookCover').onchange=e=>{const file=e.target.files[0];$('#saveCover').disabled=!!file;readImage(file,data=>{pendingCover=data;$('#saveCover').disabled=false},()=>{$('#saveCover').disabled=false})};$('#removeCover').onclick=()=>{pendingCover='';$('#notebookCover').value='';toast('cover photo removed')};$('#cancelCover').onclick=()=>closeModal('coverModal');coverModal.onclick=e=>{if(e.target===coverModal)closeModal('coverModal')};$('#saveCover').onclick=()=>{const name=$('#notebookName').value.trim();if(!name){$('#notebookName').focus();toast('Give your notebook a name');return}const n={id:editingNotebook||'n'+Date.now().toString(36),name,color:$('#notebookColor').value,emoji:$('#notebookEmoji').value.trim()||'🌼',cover:pendingCover};const before=notebookStore.slice();const index=notebookStore.findIndex(x=>x.id===n.id);if(index>=0)notebookStore[index]=n;else notebookStore.push(n);if(!persistNotebooks()){notebookStore=before;return}closeModal('coverModal');renderShelf();requestAnimationFrame(()=>shelf.querySelector('[data-notebook="'+n.id+'"]')?.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'}))};
+
+function openNotebook(id){animateNotebookOpen(id)}
+function renderShelf(){const carousel=shelf.querySelector('.notebook-carousel');carousel.replaceChildren();notebookStore.forEach(n=>{const card=document.createElement('article');card.className='notebook-card';card.dataset.notebook=n.id;const cover=document.createElement('button');cover.className='notebook-cover';cover.style.setProperty('--cover',n.color||'#e7ca77');cover.style.backgroundColor=n.color||'#e7ca77';cover.setAttribute('aria-label','Open '+n.name);const img=document.createElement('img');img.src=n.cover||renderCoverWallpaper(n.wallpaperSeed);img.alt='';img.decoding='async';cover.classList.add('wallpaper-cover');cover.append(img);const label=document.createElement('span');label.className='cover-title';label.textContent=n.name;cover.append(label);cover.onclick=()=>openNotebook(n.id);const title=document.createElement('h2');title.textContent=n.name;const count=document.createElement('p');const total=notebookPageCount(n.id);count.textContent=total+' '+(total===1?'page':'pages');const edit=document.createElement('button');edit.textContent='customize cover';edit.onclick=()=>editNotebook(n.id);const regenerate=document.createElement('button');regenerate.className='regenerate-wallpaper';regenerate.innerHTML=icon('rotate')+'<span>new wallpaper</span>';regenerate.setAttribute('aria-label','Generate a new cover for '+n.name);regenerate.onclick=()=>regenerateNotebookWallpaper(n.id,regenerate);card.append(cover,title,count,regenerate,edit);carousel.append(card)})}
+const coverModal=document.createElement('div');coverModal.className='modal';coverModal.id='coverModal';coverModal.setAttribute('role','dialog');coverModal.setAttribute('aria-modal','true');coverModal.setAttribute('aria-label','Notebook cover');coverModal.innerHTML='<div class="sheet"><h3>Your notebook</h3><label for="notebookName">Name</label><input id="notebookName" maxlength="60" placeholder="Little moments"><div class="cover-form-row"><label>Cover color<input id="notebookColor" type="color" value="#9bc9d8"></label><label>Cover emoji<input id="notebookEmoji" maxlength="12" value="🌼"></label></div><label for="notebookCover">Or use a cover photo</label><input id="notebookCover" type="file" accept="image/*"><button class="btn" id="removeCover">remove photo</button><div class="row"><button class="btn" id="cancelCover">cancel</button><button class="btn primary" id="saveCover">save notebook</button></div></div>';document.body.append(coverModal);let editingNotebook=null,pendingCover='',pendingWallpaperSeed=0;
+function editNotebook(id){editingNotebook=id;$('#saveCover').disabled=false;const n=notebookStore.find(x=>x.id===id);$('#notebookName').value=n?.name||'';$('#notebookColor').value=n?.color||['#f0ce78','#91c8df','#c1afe9','#efa98f','#a8d6be','#e9afca'][notebookStore.length%6];$('#notebookEmoji').value=n?.emoji||'🌼';pendingCover=n?.cover||'';pendingWallpaperSeed=n?.wallpaperSeed??newWallpaperSeed();refreshWallpaperPreview();$('#notebookCover').value='';openModal('coverModal')}
+$('#newNotebook').onclick=()=>editNotebook(null);$('#notebookCover').onchange=e=>{const file=e.target.files[0];$('#saveCover').disabled=!!file;readImage(file,data=>{pendingCover=data;refreshWallpaperPreview();$('#saveCover').disabled=false},()=>{$('#saveCover').disabled=false})};$('#removeCover').onclick=()=>{pendingCover='';$('#notebookCover').value='';refreshWallpaperPreview();toast('generated wallpaper restored')};$('#cancelCover').onclick=()=>closeModal('coverModal');coverModal.onclick=e=>{if(e.target===coverModal)closeModal('coverModal')};$('#saveCover').onclick=()=>{const name=$('#notebookName').value.trim();if(!name){$('#notebookName').focus();toast('Give your notebook a name');return}const n={id:editingNotebook||'n'+Date.now().toString(36),name,color:$('#notebookColor').value,emoji:$('#notebookEmoji').value.trim()||'🌼',cover:pendingCover,wallpaperSeed:pendingWallpaperSeed};const before=notebookStore.slice();const index=notebookStore.findIndex(x=>x.id===n.id);if(index>=0)notebookStore[index]=n;else notebookStore.push(n);if(!persistNotebooks()){notebookStore=before;return}closeModal('coverModal');renderShelf();requestAnimationFrame(()=>shelf.querySelector('[data-notebook="'+n.id+'"]')?.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'}))};
 const notebookLoad=load;load=function(){notebookLoad();refreshPaperOptions();fixLinkSizes()};
 // Use the whole sheet for a decisive swipe, except editable controls and draggable layers.
 swipeZone.addEventListener('touchstart',e=>{if(e.touches.length!==1||e.target.closest('.item,button,input,textarea,a,[contenteditable="true"],.tape-handle,.piece-resize'))return;swipeStartX=e.touches[0].clientX;swipeStartY=e.touches[0].clientY;swipeActive=true},{passive:true});
 window.addEventListener('keydown',e=>{if(shelf.classList.contains('open')&&!$('.modal.open')&&e.key==='Escape')hideShelf()});
 refreshPaperOptions();fixLinkSizes();persistNotebooks();renderShelf();shelf.classList.add('open');$('.app').inert=true;
+
+function readableText(el){const clone=el.cloneNode(true);clone.querySelectorAll('button,.tape-handle,.piece-resize,.resize,.itembar').forEach(x=>x.remove());clone.querySelectorAll('br').forEach(x=>x.replaceWith('\n'));clone.querySelectorAll('div,p,li').forEach(x=>x.append('\n'));return clone.textContent.replace(/\n{3,}/g,'\n\n').trimEnd()}
+async function quickCopy(text){try{if(navigator.clipboard?.writeText){await navigator.clipboard.writeText(text);toast('copied');return}}catch{}const active=document.activeElement;const area=document.createElement('textarea');area.value=text;area.style.cssText='position:fixed;left:-9999px;top:0';document.body.append(area);area.select();let ok=false;try{ok=document.execCommand('copy')}catch{}area.remove();active?.focus({preventScroll:true});toast(ok?'copied':'Select the text to copy in this browser')}
+function addCopy(host,getText,label,floating=false){const button=document.createElement('button');button.className='quick-copy'+(floating?' floating-copy':'');button.type='button';iconButton(button,'copy',label);button.onclick=e=>{e.stopPropagation();quickCopy(getText())};host.append(button);return button}
+addCopy(paging,()=>readableText(editor),'Copy entire journal entry');
+addCopy($('.todo-head'),()=>readTodos().map(t=>(t.done?'☑ ':'☐ ')+t.text).join('\n'),'Copy checklist');
+addCopy($('.photo-card'),()=>caption.textContent,'Copy photo caption',true);
+const writingCopy=addCopy($('#writingModal .row'),()=>readableText(editor),'Copy writing');$('#writingModal .row').prepend(writingCopy);
+iconButton($('#copyCodeEditor'),'copy','Copy code');
+function textCopies(el){if(['note','grid','text'].includes(el.dataset.type)&&!el.querySelector(':scope > .quick-copy'))addCopy(el,()=>readableText(el.querySelector('.content')),'Copy '+(el.dataset.type==='grid'?'grid note':el.dataset.type),true);if(el.dataset.type==='code')iconButton(el.querySelector('.copy-code'),'copy','Copy code snippet');if(el.dataset.type==='link'&&!el.querySelector('.copy-link')){const button=addCopy(el.querySelector('.itembar'),()=>{try{return JSON.parse(el.dataset.payload).url||''}catch{return ''}},'Copy link');button.classList.add('copy-link')}}
+const copyItemRender=renderItem;renderItem=function(o){const el=copyItemRender(o);textCopies(el);return el};board.querySelectorAll('.item').forEach(textCopies);
+const priorRenderCode=renderCode;renderCode=function(el,c,value){priorRenderCode(el,c,value);if(typeof iconPaths!=='undefined')iconButton(el.querySelector('.copy-code'),'copy','Copy code snippet')};
+for(const id of ['modalPrompt','modalCaption']){const field=$('#'+id);const wrap=document.createElement('div');wrap.className='copy-field-wrap';field.before(wrap);wrap.append(field);addCopy(wrap,()=>field.value,'Copy text',true)}
+// Prompt copying also uses the fallback supported by downloaded HTML files.
+$('#copyBtn').onclick=()=>quickCopy(promptEl.textContent);
+let openingNotebook=false;
+
+function enabledPagePieces(){return pieces.filter(([,el])=>!el.classList.contains('piece-hidden')).map(([id])=>id)}
+function applyPagePieces(){let raw=null;try{raw=JSON.parse(localStorage.getItem(key())||'null')}catch{}const enabled=Array.isArray(raw?.enabledPieces)?raw.enabledPieces:raw?pieces.map(([id])=>id):[];pieces.forEach(([id,el])=>el.classList.toggle('piece-hidden',id!=='date'&&!enabled.includes(id)));requestAnimationFrame(()=>{paginateText();paginateTodos()})}
+function addPagePiece(id){const el=pieces.find(([name])=>name===id)?.[1];if(!el)return;el.classList.remove('piece-hidden');bringToTop(el);menu.classList.remove('open');add.setAttribute('aria-expanded','false');save(false);requestAnimationFrame(()=>{paginateText();paginateTodos()});if(id==='writing')editWriting();if(id==='moment')promptEl.focus();if(id==='tasks')el.querySelector('.todo-text')?.focus()}
+pieces.forEach(([id,el])=>{if(id==='date')return;const remove=document.createElement('button');remove.className='piece-remove';iconButton(remove,'close','Remove '+id+' from page');remove.onclick=e=>{e.stopPropagation();el.classList.add('piece-hidden');save(false)};el.append(remove)});
+for(const [id,label,glyph] of [['writing','Journal entry','write'],['tasks','To-do list','note'],['moment','Thought','text'],['photo','Captioned photo','photo']]){const b=document.createElement('button');b.innerHTML=icon(glyph)+'<span>'+label+'</span>';menu.append(b);b.onclick=()=>{if(id==='photo'){menu.classList.remove('open');$('#heroInput').click()}else addPagePiece(id)}}
+const previousHeroChange=$('#heroInput').onchange;$('#heroInput').onchange=e=>{if(e.target.files[0]){pieces.find(([id])=>id==='photo')[1].classList.remove('piece-hidden');save(false)}previousHeroChange(e)};
+const dateMenuButton=document.createElement('button');dateMenuButton.innerHTML=icon('calendar')+'<span>Go to date</span>';menu.append(dateMenuButton);dateMenuButton.onclick=()=>{menu.classList.remove('open');dateButton.click()};
+const pieceLoad=load;load=function(){pieceLoad();applyPagePieces()};applyPagePieces();
+const homeColors=document.createElement('div');homeColors.className='home-colors';homeColors.innerHTML='<span class="home-colors-label">Notebook palette</span>';const colorName=document.createElement('span');colorName.className='home-color-name';
+function refreshHomeColors(){const current=document.body.dataset.theme;homeColors.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.theme===current)));colorName.textContent=themes.find(t=>t.id===current)?.name||'Butter'}
+themes.forEach(t=>{const button=document.createElement('button');button.className='home-color';button.dataset.theme=t.id;button.style.setProperty('--swatch',t.dot);button.title=t.name;button.setAttribute('aria-label',t.name+' notebook palette');button.onclick=()=>{document.body.dataset.theme=t.id;localStorage.setItem('softleaf-theme',t.id);buildThemeMenu();refreshHomeColors();feedback()};homeColors.append(button)});homeColors.append(colorName);shelf.querySelector('.shelf-heading').after(homeColors);refreshHomeColors();
+const priorShowShelf=showShelf;showShelf=function(){priorShowShelf();refreshHomeColors()};
+async function animateNotebookOpen(id){
+ if(openingNotebook)return;openingNotebook=true;
+ const source=shelf.querySelector('[data-notebook="'+id+'"] .notebook-cover');
+ let overlay,fade,originalVisibility=source?.style.visibility||'';
+ try{
+  save(false);activeNotebook=id;persistNotebooks();selected=localStorage.getItem('softleaf-last-date:'+id)||iso(new Date());load();
+  if(!source||matchMedia('(prefers-reduced-motion: reduce)').matches){hideShelf();return}
+  await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+  const start=source.getBoundingClientRect(),target=board.getBoundingClientRect(),spread=innerWidth>900;
+  const sx=start.width/(spread?target.width/2:target.width),sy=start.height/target.height;
+  const initialLeft=spread?start.left-start.width:start.left;
+  overlay=document.createElement('div');overlay.className='opening-overlay';overlay.setAttribute('aria-hidden','true');
+  const scene=document.createElement('div');scene.className='opening-scene';scene.style.width=target.width+'px';scene.style.height=target.height+'px';scene.style.left='0';scene.style.top='0';
+  const from=`translate(${initialLeft}px,${start.top}px) scale(${sx},${sy})`,to=`translate(${target.left}px,${target.top}px) scale(1,1)`;scene.style.transform=from;
+  const paper=document.createElement('div');paper.className='opening-page';paper.style.opacity='0';if(spread)paper.style.clipPath='inset(0 0 0 50%)';
+  const snapshot=board.cloneNode(true);snapshot.removeAttribute('id');snapshot.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));snapshot.inert=true;snapshot.querySelectorAll('.selected,.is-moving').forEach(el=>el.classList.remove('selected','is-moving'));snapshot.style.background=getComputedStyle(board).background;snapshot.style.isolation='isolate';paper.append(snapshot);
+  const hinge=document.createElement('div');hinge.className='opening-hinge'+(spread?'':' single');const cover=source.cloneNode(true);cover.classList.add('opening-cover');cover.removeAttribute('aria-label');cover.inert=true;const inside=document.createElement('div');inside.className='opening-inside';if(spread){const leftPage=snapshot.cloneNode(true);leftPage.style.cssText='position:absolute;left:0;top:0;width:'+target.width+'px;height:'+target.height+'px;background:'+getComputedStyle(board).background;inside.append(leftPage)}hinge.append(cover,inside);scene.append(paper,hinge);overlay.append(scene);document.body.append(overlay);source.style.visibility='hidden';feedback(true);
+  // Open at the shelf position; the camera approaches only once the cover is almost open.
+  const turn=hinge.animate([{transform:'rotateY(0deg)'},{transform:'rotateY(-180deg)'}],{duration:580,easing:'cubic-bezier(.3,.05,.25,1)',fill:'forwards'});
+  paper.animate([{opacity:0},{opacity:1}],{duration:240,delay:90,fill:'forwards'});
+  const approach=scene.animate([{transform:from,offset:0},{transform:from,offset:.46,easing:'cubic-bezier(.22,.65,.25,1)'},{transform:to,offset:1}],{duration:1080,easing:'linear',fill:'forwards'});
+  fade=shelf.animate([{opacity:1},{opacity:0}],{duration:470,delay:540,easing:'ease-in-out',fill:'forwards'});
+  await Promise.all([turn.finished,approach.finished,fade.finished]);
+  hideShelf();fade.cancel();
+  await overlay.animate([{opacity:1},{opacity:0}],{duration:90,easing:'linear'}).finished;
+ }catch{hideShelf()}finally{fade?.cancel();overlay?.remove();if(source)source.style.visibility=originalVisibility;$('.app').inert=false;openingNotebook=false;shelfTrigger.focus({preventScroll:true})}
+}
+
+// The actual saved editor now lives on the paper, not in a separate dialog.
+preview.remove();writingCard.insertBefore(editor,paging);editor.setAttribute('aria-label','Journal writing');editor.setAttribute('data-inline-writing','true');editor.setAttribute('aria-multiline','true');editor.setAttribute('role','textbox');editor.dataset.placeholder='What would you like to remember?';
+writingModal.remove();
+editWriting=function(){editor.focus({preventScroll:true})};
+$('#editWriting').onclick=editWriting;
+let inlinePageTotal=1;
+function updateWritingPager(){const width=editor.clientWidth;if(!width)return;const stride=width+32;inlinePageTotal=Math.max(1,Math.ceil((editor.scrollWidth+32)/stride-.01));textPage=Math.min(Math.max(0,textPage),inlinePageTotal-1);$('#textCount').textContent=`${textPage+1} / ${inlinePageTotal}`;$('#textPrev').disabled=textPage===0;$('#textNext').disabled=textPage>=inlinePageTotal-1}
+paginateText=function(){if(!editor.clientWidth||!editor.clientHeight)return;editor.style.columnWidth=editor.clientWidth+'px';updateWritingPager();editor.scrollLeft=textPage*(editor.clientWidth+32)};
+$('#textPrev').onclick=()=>{textPage=Math.max(0,textPage-1);paginateText();feedback(true)};$('#textNext').onclick=()=>{textPage=Math.min(inlinePageTotal-1,textPage+1);paginateText();feedback(true)};
+editor.addEventListener('input',()=>requestAnimationFrame(()=>{textPage=Math.round(editor.scrollLeft/(editor.clientWidth+32));updateWritingPager()}));
+editor.addEventListener('scroll',()=>{textPage=Math.round(editor.scrollLeft/(editor.clientWidth+32));updateWritingPager()},{passive:true});
+editor.addEventListener('paste',e=>{const text=e.clipboardData?.getData('text/plain');if(text===undefined)return;e.preventDefault();document.execCommand('insertText',false,text)});
+new ResizeObserver(()=>paginateText()).observe(editor);
+requestAnimationFrame(paginateText);
+let closingNotebook=false;
+async function closeNotebookToShelf(){
+ if(openingNotebook||closingNotebook||shelf.classList.contains('open'))return;
+ if(matchMedia('(prefers-reduced-motion: reduce)').matches){priorShowShelf();refreshHomeColors();return}
+ closingNotebook=true;save(false);editor.blur();
+ const bounds=board.getBoundingClientRect(),spread=innerWidth>900;
+ let overlay,source,fade;
+ try{
+  // Prepare the destination in place, then pull the same open sheet back toward its cover.
+  renderShelf();refreshHomeColors();shelf.style.opacity='0';shelf.classList.add('open');$('.app').inert=true;
+  source=shelf.querySelector('[data-notebook="'+activeNotebook+'"] .notebook-cover');
+  source?.closest('.notebook-card').scrollIntoView({block:'nearest',inline:'center',behavior:'instant'});
+  await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+  if(!source)throw new Error('Missing cover');
+  const target=source.getBoundingClientRect(),sx=target.width/(spread?bounds.width/2:bounds.width),sy=target.height/bounds.height,left=spread?target.left-target.width:target.left;
+  overlay=document.createElement('div');overlay.className='opening-overlay';overlay.setAttribute('aria-hidden','true');const scene=document.createElement('div');scene.className='opening-scene';scene.style.cssText=`width:${bounds.width}px;height:${bounds.height}px;left:0;top:0;transform:translate(${bounds.left}px,${bounds.top}px)`;
+  const paper=document.createElement('div');paper.className='opening-page';if(spread)paper.style.clipPath='inset(0 0 0 50%)';const snapshot=board.cloneNode(true);snapshot.removeAttribute('id');snapshot.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));snapshot.inert=true;snapshot.style.background=getComputedStyle(board).background;snapshot.querySelectorAll('.selected,.is-moving').forEach(el=>el.classList.remove('selected','is-moving'));paper.append(snapshot);
+  const hinge=document.createElement('div');hinge.className='opening-hinge'+(spread?'':' single');hinge.style.transform='rotateY(-180deg)';
+  const cover=source.cloneNode(true);cover.classList.add('opening-cover');cover.inert=true;const inside=document.createElement('div');inside.className='opening-inside';if(spread){const leftPage=snapshot.cloneNode(true);leftPage.style.cssText=`position:absolute;left:0;top:0;width:${bounds.width}px;height:${bounds.height}px;background:${getComputedStyle(board).background}`;inside.append(leftPage)}hinge.append(cover,inside);scene.append(paper,hinge);overlay.append(scene);document.body.append(overlay);snapshot.querySelector('[data-inline-writing]')?.scrollTo(editor.scrollLeft,0);source.style.visibility='hidden';feedback(true);
+  fade=shelf.animate([{opacity:0},{opacity:1}],{duration:460,easing:'ease-in-out',fill:'forwards'});
+  const retreat=scene.animate([{transform:`translate(${bounds.left}px,${bounds.top}px) scale(1,1)`},{transform:`translate(${left}px,${target.top}px) scale(${sx},${sy})`}],{duration:620,easing:'cubic-bezier(.25,.65,.25,1)',fill:'forwards'});
+  const shut=hinge.animate([{transform:'rotateY(-180deg)'},{transform:'rotateY(0deg)'}],{duration:550,delay:430,easing:'cubic-bezier(.3,.1,.25,1)',fill:'forwards'});
+  paper.animate([{opacity:1},{opacity:0}],{duration:160,delay:820,fill:'forwards'});
+  await Promise.all([retreat.finished,shut.finished,fade.finished]);
+ }catch{}finally{
+  if(source)source.style.visibility='';shelf.style.opacity='';fade?.cancel();overlay?.remove();shelf.classList.add('open');$('.app').inert=true;closingNotebook=false;$('#newNotebook').focus({preventScroll:true})
+ }
+}
+showShelf=function(){closeNotebookToShelf()};
+
+// Adapted from the supplied Polygon Wallpaper Generator: seeded portrait mesh,
+// three-color directional gradient, triangle normals and diffuse lighting.
+function newWallpaperSeed(){if(globalThis.crypto?.getRandomValues)return crypto.getRandomValues(new Uint32Array(1))[0];return (Date.now()^Math.floor(Math.random()*4294967296))>>>0}
+function renderCoverWallpaper(seed){
+ const cacheKey='poly1:'+seed;if(wallpaperCache.has(cacheKey))return wallpaperCache.get(cacheKey);
+ let state=Number(seed)>>>0;const random=()=>{state+=0x6D2B79F5;let t=state;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return ((t^(t>>>14))>>>0)/4294967296};
+ const canvas=document.createElement('canvas');canvas.width=768;canvas.height=1024;const ctx=canvas.getContext('2d',{alpha:false});if(!ctx)throw new Error('Canvas is unavailable');const width=canvas.width,height=canvas.height;
+ const randomColor=()=>({r:Math.floor(random()*256),g:Math.floor(random()*256),b:Math.floor(random()*256)});
+ const mix=(a,b,t)=>({r:Math.round(a.r+t*(b.r-a.r)),g:Math.round(a.g+t*(b.g-a.g)),b:Math.round(a.b+t*(b.b-a.b))});
+ const normal=(a,b,c)=>{const ux=b.x-a.x,uy=b.y-a.y,uz=b.z-a.z,vx=c.x-a.x,vy=c.y-a.y,vz=c.z-a.z;const x=uy*vz-uz*vy,y=uz*vx-ux*vz,z=ux*vy-uy*vx,len=Math.hypot(x,y,z);return len?{x:x/len,y:y/len,z:z/len}:{x:0,y:0,z:1}};
+ const cellSize=40+Math.floor(random()*51),variance=.5+random()*.2,palette=[randomColor(),randomColor(),randomColor()],angle=random()*Math.PI*2,dx=Math.cos(angle),dy=Math.sin(angle),margin=cellSize*2,cols=Math.ceil((width+margin*2)/cellSize),rows=Math.ceil((height+margin*2)/cellSize),points=[];
+ for(let y=0;y<=rows;y++){const row=[];for(let x=0;x<=cols;x++){const edge=x===0||x===cols||y===0||y===rows,jitter=cellSize*variance/2;row.push({x:x*cellSize-margin+(edge?0:(random()-.5)*jitter*2),y:y*cellSize-margin+(edge?0:(random()-.5)*jitter*2),z:(random()-.5)*32*variance})}points.push(row)}
+ const lightLength=Math.sqrt(1.5),light={x:-.5/lightLength,y:-.5/lightLength,z:1/lightLength};ctx.fillStyle=`rgb(${palette[0].r},${palette[0].g},${palette[0].b})`;ctx.fillRect(0,0,width,height);
+ const triangle=(a,b,c)=>{const n=normal(a,b,c),nx=(a.x+b.x+c.x)/3/width-.5,ny=(a.y+b.y+c.y)/3/height-.5,t=Math.max(0,Math.min(1,((nx*dx+ny*dy)/.707)*.5+.5)),base=t<.5?mix(palette[0],palette[1],t*2):mix(palette[1],palette[2],(t-.5)*2),factor=.6+.6*(n.x*light.x+n.y*light.y+n.z*light.z),channel=v=>Math.min(255,Math.max(0,Math.round(v*factor))),color=`rgb(${channel(base.r)},${channel(base.g)},${channel(base.b)})`;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.lineTo(c.x,c.y);ctx.closePath();ctx.fillStyle=color;ctx.fill();ctx.strokeStyle=color;ctx.lineWidth=.7;ctx.stroke()};
+ for(let y=0;y<rows;y++)for(let x=0;x<cols;x++){const a=points[y][x],b=points[y][x+1],c=points[y+1][x],d=points[y+1][x+1];if((x+y)%2===0){triangle(a,b,c);triangle(b,d,c)}else{triangle(a,b,d);triangle(a,d,c)}}
+ const result=canvas.toDataURL('image/jpeg',.92);if(wallpaperCache.size>=24)wallpaperCache.delete(wallpaperCache.keys().next().value);wallpaperCache.set(cacheKey,result);return result;
+}
+
+function refreshWallpaperPreview(){const img=$('#wallpaperPreview');if(img)img.src=pendingCover||renderCoverWallpaper(pendingWallpaperSeed)}
+async function regenerateNotebookWallpaper(id,button){
+ if(button.disabled)return;button.disabled=true;const previousLabel=button.innerHTML;button.textContent='rendering…';
+ try{
+  await new Promise(resolve=>requestAnimationFrame(resolve));
+  const n=notebookStore.find(x=>x.id===id);if(!n)return;
+  let seed=newWallpaperSeed();if(seed===n.wallpaperSeed)seed=(seed+1)>>>0;
+  const image=renderCoverWallpaper(seed),oldSeed=n.wallpaperSeed,oldCover=n.cover;n.wallpaperSeed=seed;n.cover='';
+  if(!persistNotebooks()){n.wallpaperSeed=oldSeed;n.cover=oldCover;return}
+  const cover=shelf.querySelector('[data-notebook="'+id+'"] .notebook-cover');const img=cover?.querySelector('img');if(img){img.src=image;if(!matchMedia('(prefers-reduced-motion: reduce)').matches)img.animate([{opacity:.25},{opacity:1}],{duration:240,easing:'ease-out'})}feedback();toast('new cover, same journal')
+ }catch{toast('Could not render a cover — try again')}finally{button.disabled=false;button.innerHTML=previousLabel}
+}
+const wallpaperControls=document.createElement('div');wallpaperControls.className='wallpaper-controls';wallpaperControls.innerHTML='<img class="wallpaper-preview" id="wallpaperPreview" alt="Notebook cover preview"><button class="btn" id="regeneratePreview" type="button"></button>';
+$('#coverModal .cover-form-row').before(wallpaperControls);$('#regeneratePreview').innerHTML=icon('rotate')+'<span>new wallpaper</span>';
+$('#regeneratePreview').onclick=async()=>{const button=$('#regeneratePreview');button.disabled=true;try{await new Promise(resolve=>requestAnimationFrame(resolve));let seed=newWallpaperSeed();if(seed===pendingWallpaperSeed)seed=(seed+1)>>>0;renderCoverWallpaper(seed);pendingWallpaperSeed=seed;pendingCover='';$('#notebookCover').value='';refreshWallpaperPreview();feedback()}catch{toast('Could not render a cover — try again')}finally{button.disabled=false}};
+$('#removeCover').textContent='use generated wallpaper';
 
 </script>
 </body>
