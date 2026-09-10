@@ -503,6 +503,15 @@ body>.theme-picker{position:fixed;left:20px;right:auto;top:auto;bottom:max(16px,
 
 .notebook-cover.wallpaper-cover{justify-content:flex-end;padding:25px}.wallpaper-cover .cover-title{margin-top:auto;background:#fff9edf0;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font-size:15px;border:1px solid #ffffff90;box-shadow:0 4px 18px #0b15342e}.notebook-cover>img{transition:opacity .2s}.notebook-card>.regenerate-wallpaper{display:inline-flex;align-items:center;justify-content:center;gap:7px;text-decoration:none;border:1px solid #b7c9e037;border-radius:20px;padding:7px 12px;margin:4px 6px;min-height:36px;color:#e2ebfc;background:#c2d7ff0c}.regenerate-wallpaper svg{width:15px;height:15px}.regenerate-wallpaper:disabled{opacity:.5}.notebook-card>button:not(.notebook-cover):not(.regenerate-wallpaper){display:block;margin:0 auto;font-size:11px}.wallpaper-controls{display:flex;align-items:center;gap:18px;margin:12px 0 18px}.wallpaper-preview{width:120px;height:160px;object-fit:cover;border-radius:4px 12px 12px 4px;box-shadow:3px 4px 0 #dfd8c1,0 5px 18px #1c2a421a;flex:none}.wallpaper-controls .btn{display:flex;align-items:center;gap:8px}.cover-form-row{display:none}.notebook-cover.opening-cover .cover-title{margin-top:auto}
 
+
+.notebook-shelf{background:#151b27;color:#edf2fa}.home-colors,.mobile-themes,body>.theme-picker{display:none!important}
+body{background:#151b27}.notebook-card h2{color:#f0f3fa}.notebook-card p,.notebook-card>button:not(.notebook-cover){color:#a9b5ca}.shelf-hint{color:#8e9cb3}.shelf-heading button{background:#ffffff08;border-color:#ffffff24;color:#e6edf9}.shelf-heading button:hover{background:#ffffff14}
+.book{border-color:var(--binding)}.bookmark-control,.bookmark-control[aria-pressed="true"]{background:var(--ribbon)!important}.todo-row input[type="checkbox"]{accent-color:var(--accent-ink)}.item.selected{outline-color:var(--accent-ink)}.btn.primary{background:var(--accent-soft);color:var(--accent-ink)}
+
+
+.book .board[data-paper="dots"]{background:radial-gradient(circle,color-mix(in srgb,var(--accent-ink) 25%,transparent) .7px,transparent 1px) 0 0/20px 20px,var(--paper)}
+.book .board[data-paper="squares"]{background:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px),var(--paper);background-size:20px 20px}
+.book .board[data-paper="lines"]{background:repeating-linear-gradient(to bottom,transparent 0,transparent 27px,var(--grid) 28px,transparent 29px),var(--paper)}
 </style>
 </head>
 <body>
@@ -645,7 +654,7 @@ function serializeItems(){
   }))
 }
 function load(){
-  document.body.dataset.theme=localStorage.getItem('softleaf-theme')||'butter';
+  applyGeneratedPalette();
   const d=dateFrom(selected),e=getEntry();
   $('#dayName').textContent=d.toLocaleDateString(undefined,{weekday:'long'});
   $('#fullDate').textContent=d.toLocaleDateString(undefined,{month:'long',day:'numeric',year:'numeric'});
@@ -1056,7 +1065,7 @@ function showShelf(){save(false);renderShelf();shelf.classList.add('open');$('.a
 function hideShelf(){shelf.classList.remove('open');$('.app').inert=false;shelfTrigger.focus()}
 
 function openNotebook(id){animateNotebookOpen(id)}
-function renderShelf(){const carousel=shelf.querySelector('.notebook-carousel');carousel.replaceChildren();notebookStore.forEach(n=>{const card=document.createElement('article');card.className='notebook-card';card.dataset.notebook=n.id;const cover=document.createElement('button');cover.className='notebook-cover';cover.style.setProperty('--cover',n.color||'#e7ca77');cover.style.backgroundColor=n.color||'#e7ca77';cover.setAttribute('aria-label','Open '+n.name);const img=document.createElement('img');img.src=n.cover||renderCoverWallpaper(n.wallpaperSeed);img.alt='';img.decoding='async';cover.classList.add('wallpaper-cover');cover.append(img);const label=document.createElement('span');label.className='cover-title';label.textContent=n.name;cover.append(label);cover.onclick=()=>openNotebook(n.id);const title=document.createElement('h2');title.textContent=n.name;const count=document.createElement('p');const total=notebookPageCount(n.id);count.textContent=total+' '+(total===1?'page':'pages');const edit=document.createElement('button');edit.textContent='customize cover';edit.onclick=()=>editNotebook(n.id);const regenerate=document.createElement('button');regenerate.className='regenerate-wallpaper';regenerate.innerHTML=icon('rotate')+'<span>new wallpaper</span>';regenerate.setAttribute('aria-label','Generate a new cover for '+n.name);regenerate.onclick=()=>regenerateNotebookWallpaper(n.id,regenerate);card.append(cover,title,count,regenerate,edit);carousel.append(card)})}
+function renderShelf(){const carousel=shelf.querySelector('.notebook-carousel');carousel.replaceChildren();notebookStore.forEach(n=>{const card=document.createElement('article');card.className='notebook-card';card.dataset.notebook=n.id;const cover=document.createElement('button');cover.className='notebook-cover';cover.style.setProperty('--cover',n.color||'#e7ca77');cover.style.backgroundColor=n.color||'#e7ca77';cover.setAttribute('aria-label','Open '+n.name);const img=document.createElement('img');img.src=n.cover||renderCoverWallpaper(n.wallpaperSeed);img.alt='';img.decoding='async';cover.classList.add('wallpaper-cover');cover.append(img);const label=document.createElement('span');label.className='cover-title';label.textContent=n.name;cover.append(label);cover.onclick=()=>openNotebook(n.id);const title=document.createElement('h2');title.textContent=n.name;const count=document.createElement('p');const total=notebookPageCount(n.id);count.textContent=total+' '+(total===1?'page':'pages');const edit=document.createElement('button');edit.textContent='customize cover';edit.onclick=()=>editNotebook(n.id);card.append(cover,title,count,edit);carousel.append(card)})}
 const coverModal=document.createElement('div');coverModal.className='modal';coverModal.id='coverModal';coverModal.setAttribute('role','dialog');coverModal.setAttribute('aria-modal','true');coverModal.setAttribute('aria-label','Notebook cover');coverModal.innerHTML='<div class="sheet"><h3>Your notebook</h3><label for="notebookName">Name</label><input id="notebookName" maxlength="60" placeholder="Little moments"><div class="cover-form-row"><label>Cover color<input id="notebookColor" type="color" value="#9bc9d8"></label><label>Cover emoji<input id="notebookEmoji" maxlength="12" value="🌼"></label></div><label for="notebookCover">Or use a cover photo</label><input id="notebookCover" type="file" accept="image/*"><button class="btn" id="removeCover">remove photo</button><div class="row"><button class="btn" id="cancelCover">cancel</button><button class="btn primary" id="saveCover">save notebook</button></div></div>';document.body.append(coverModal);let editingNotebook=null,pendingCover='',pendingWallpaperSeed=0;
 function editNotebook(id){editingNotebook=id;$('#saveCover').disabled=false;const n=notebookStore.find(x=>x.id===id);$('#notebookName').value=n?.name||'';$('#notebookColor').value=n?.color||['#f0ce78','#91c8df','#c1afe9','#efa98f','#a8d6be','#e9afca'][notebookStore.length%6];$('#notebookEmoji').value=n?.emoji||'🌼';pendingCover=n?.cover||'';pendingWallpaperSeed=n?.wallpaperSeed??newWallpaperSeed();refreshWallpaperPreview();$('#notebookCover').value='';openModal('coverModal')}
 $('#newNotebook').onclick=()=>editNotebook(null);$('#notebookCover').onchange=e=>{const file=e.target.files[0];$('#saveCover').disabled=!!file;readImage(file,data=>{pendingCover=data;refreshWallpaperPreview();$('#saveCover').disabled=false},()=>{$('#saveCover').disabled=false})};$('#removeCover').onclick=()=>{pendingCover='';$('#notebookCover').value='';refreshWallpaperPreview();toast('generated wallpaper restored')};$('#cancelCover').onclick=()=>closeModal('coverModal');coverModal.onclick=e=>{if(e.target===coverModal)closeModal('coverModal')};$('#saveCover').onclick=()=>{const name=$('#notebookName').value.trim();if(!name){$('#notebookName').focus();toast('Give your notebook a name');return}const n={id:editingNotebook||'n'+Date.now().toString(36),name,color:$('#notebookColor').value,emoji:$('#notebookEmoji').value.trim()||'🌼',cover:pendingCover,wallpaperSeed:pendingWallpaperSeed};const before=notebookStore.slice();const index=notebookStore.findIndex(x=>x.id===n.id);if(index>=0)notebookStore[index]=n;else notebookStore.push(n);if(!persistNotebooks()){notebookStore=before;return}closeModal('coverModal');renderShelf();requestAnimationFrame(()=>shelf.querySelector('[data-notebook="'+n.id+'"]')?.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'}))};
@@ -1171,7 +1180,7 @@ showShelf=function(){closeNotebookToShelf()};
 function newWallpaperSeed(){if(globalThis.crypto?.getRandomValues)return crypto.getRandomValues(new Uint32Array(1))[0];return (Date.now()^Math.floor(Math.random()*4294967296))>>>0}
 function renderCoverWallpaper(seed){
  const cacheKey='poly1:'+seed;if(wallpaperCache.has(cacheKey))return wallpaperCache.get(cacheKey);
- let state=Number(seed)>>>0;const random=()=>{state+=0x6D2B79F5;let t=state;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return ((t^(t>>>14))>>>0)/4294967296};
+ const random=wallpaperRandom(seed);
  const canvas=document.createElement('canvas');canvas.width=768;canvas.height=1024;const ctx=canvas.getContext('2d',{alpha:false});if(!ctx)throw new Error('Canvas is unavailable');const width=canvas.width,height=canvas.height;
  const randomColor=()=>({r:Math.floor(random()*256),g:Math.floor(random()*256),b:Math.floor(random()*256)});
  const mix=(a,b,t)=>({r:Math.round(a.r+t*(b.r-a.r)),g:Math.round(a.g+t*(b.g-a.g)),b:Math.round(a.b+t*(b.b-a.b))});
@@ -1200,6 +1209,19 @@ const wallpaperControls=document.createElement('div');wallpaperControls.classNam
 $('#coverModal .cover-form-row').before(wallpaperControls);$('#regeneratePreview').innerHTML=icon('rotate')+'<span>new wallpaper</span>';
 $('#regeneratePreview').onclick=async()=>{const button=$('#regeneratePreview');button.disabled=true;try{await new Promise(resolve=>requestAnimationFrame(resolve));let seed=newWallpaperSeed();if(seed===pendingWallpaperSeed)seed=(seed+1)>>>0;renderCoverWallpaper(seed);pendingWallpaperSeed=seed;pendingCover='';$('#notebookCover').value='';refreshWallpaperPreview();feedback()}catch{toast('Could not render a cover — try again')}finally{button.disabled=false}};
 $('#removeCover').textContent='use generated wallpaper';
+
+function wallpaperRandom(seed){let state=Number(seed)>>>0;return ()=>{state+=0x6D2B79F5;let t=state;t=Math.imul(t^(t>>>15),t|1);t^=t+Math.imul(t^(t>>>7),t|61);return ((t^(t>>>14))>>>0)/4294967296}}
+function wallpaperPalette(seed){const random=wallpaperRandom(seed);random();random();return Array.from({length:3},()=>[Math.floor(random()*256),Math.floor(random()*256),Math.floor(random()*256)])}
+function applyGeneratedPalette(){
+ const n=notebookStore.find(x=>x.id===activeNotebook);if(!n)return;
+ const [first,second,third]=wallpaperPalette(n.wallpaperSeed);
+ const mix=(a,b,t)=>a.map((v,i)=>Math.round(v+(b[i]-v)*t)),white=[255,255,255],black=[14,20,30],rgb=c=>'rgb('+c.join(',')+')';
+ const tokens={'--accent':first,'--binding':first,'--accent-soft':mix(first,white,.84),'--accent-ink':mix(first,black,.62),'--paper':mix(second,white,.975),'--page-tint':mix(second,white,.95),'--panel':mix(first,white,.94),'--note':mix(second,white,.66),'--wash':mix(third,white,.43),'--grid':mix(first,white,.82),'--line':mix(first,white,.79),'--ink':mix(first,black,.9),'--muted':mix(first,black,.58),'--ribbon':third};
+ Object.entries(tokens).forEach(([name,value])=>document.body.style.setProperty(name,rgb(value)));document.body.dataset.theme='generated';
+}
+homeColors.remove();mobileThemes.remove();$('.theme-picker')?.remove();
+const saveCoverWithPalette=$('#saveCover').onclick;$('#saveCover').onclick=()=>{saveCoverWithPalette();if(!$('#coverModal').classList.contains('open'))applyGeneratedPalette()};
+applyGeneratedPalette();
 
 </script>
 </body>
