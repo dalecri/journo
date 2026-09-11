@@ -1514,16 +1514,25 @@ const syncModal=document.createElement('div');syncModal.className='modal';syncMo
 syncModal.innerHTML=`<div class="sheet">
   <h3>Sync across devices</h3>
   <div id="syncSignedOut">
-    <p class="sync-copy">Enter your email and we'll send a sign-in link. Open it on this device to finish. Skip it and everything stays only on this device.</p>
+    <p class="sync-copy">Sign in to keep this journal in sync everywhere. Skip it and everything stays only on this device.</p>
     <label for="syncEmail">Email</label>
     <input id="syncEmail" type="email" placeholder="you@example.com" autocomplete="email">
-    <p id="syncLinkSent" class="sync-copy" hidden>Check your email — open the link on this device to finish signing in.</p>
-    <div class="row"><button class="btn" id="skipSync">use this device only</button><button class="btn primary" id="sendSyncLink">email me a link</button></div>
+    <label for="syncPassword">Password</label>
+    <input id="syncPassword" type="password" placeholder="••••••••" autocomplete="current-password">
+    <p id="syncAuthError" class="sync-copy" hidden></p>
+    <div class="row"><button class="btn" id="skipSync">use this device only</button><button class="btn primary" id="signInSync">sign in</button></div>
+    <div class="row"><button class="btn" id="signUpSync">create account instead</button></div>
   </div>
   <div id="syncSignedIn" hidden>
     <p id="syncAccountLine"></p>
     <p id="syncStatusLine" class="sync-copy"></p>
     <div class="row"><button class="btn" id="signOutSync">sign out</button><button class="btn primary" id="forceSyncNow">sync now</button></div>
+    <label for="newPassword">New password</label>
+    <input id="newPassword" type="password" placeholder="••••••••" autocomplete="new-password">
+    <label for="newPasswordConfirm">Confirm new password</label>
+    <input id="newPasswordConfirm" type="password" placeholder="••••••••" autocomplete="new-password">
+    <p id="passwordChangeMsg" class="sync-copy" hidden></p>
+    <div class="row"><button class="btn primary" id="changePasswordBtn">change password</button></div>
   </div>
   <div class="row"><button class="btn" data-close="syncModal">close</button></div>
 </div>`;
@@ -1537,24 +1546,44 @@ function renderSyncModal(){
   if(signedIn){
     $('#syncAccountLine').textContent='Signed in as '+syncSession.user.email;
     $('#syncStatusLine').textContent=syncStatus==='syncing'?'Syncing…':syncStatus==='error'?'Could not reach the server — your changes are still saved on this device.':'Up to date.';
+    $('#newPassword').value='';$('#newPasswordConfirm').value='';$('#passwordChangeMsg').hidden=true;
   }else{
-    $('#syncLinkSent').hidden=true;$('#syncEmail').value='';
+    $('#syncAuthError').hidden=true;
   }
 }
 syncUiRefresh=()=>{if(syncModal.classList.contains('open'))renderSyncModal();renderLaunchGate()};
 $('#skipSync').onclick=()=>closeModal('syncModal');
-async function sendMagicLink(email,statusEl,btnEl){
-  if(!email){toast('Enter your email first');return}
-  btnEl.disabled=true;
-  try{const {error}=await sb.auth.signInWithOtp({email,options:{shouldCreateUser:true,emailRedirectTo:window.location.href}});if(error)throw error;statusEl.hidden=false;toast('Link sent — check your email')}
-  catch(err){console.error('Softleaf sync: send link failed',err);toast('Could not send a link — try again')}
-  btnEl.disabled=false;
+function showAuthError(el,msg){el.textContent=msg;el.hidden=false}
+async function signInOrUp(mode,email,password,errEl,btns){
+  if(!email||!password){showAuthError(errEl,'Enter both an email and a password.');return}
+  btns.forEach(b=>b.disabled=true);errEl.hidden=true;
+  try{
+    const {error}=mode==='signup'
+      ?await sb.auth.signUp({email,password})
+      :await sb.auth.signInWithPassword({email,password});
+    if(error)throw error;
+  }catch(err){
+    console.error('Softleaf sync: auth failed',err);
+    showAuthError(errEl,err.message==='Invalid login credentials'?'Wrong email or password.':(err.message||'Something went wrong — try again.'));
+  }
+  btns.forEach(b=>b.disabled=false);
 }
-$('#sendSyncLink').onclick=()=>sendMagicLink($('#syncEmail').value.trim(),$('#syncLinkSent'),$('#sendSyncLink'));
+$('#signInSync').onclick=()=>signInOrUp('signin',$('#syncEmail').value.trim(),$('#syncPassword').value,$('#syncAuthError'),[$('#signInSync'),$('#signUpSync')]);
+$('#signUpSync').onclick=()=>signInOrUp('signup',$('#syncEmail').value.trim(),$('#syncPassword').value,$('#syncAuthError'),[$('#signInSync'),$('#signUpSync')]);
 $('#signOutSync').onclick=async()=>{try{await sb.auth.signOut()}catch{}syncSession=null;syncStatus='local';renderSyncModal();toast('Signed out — this device keeps its own copy')};
 $('#forceSyncNow').onclick=()=>pushSnapshot();
+$('#changePasswordBtn').onclick=async()=>{
+  const pw=$('#newPassword').value,confirm=$('#newPasswordConfirm').value,msg=$('#passwordChangeMsg'),btn=$('#changePasswordBtn');
+  if(!pw||pw.length<6){msg.textContent='Password needs to be at least 6 characters.';msg.hidden=false;return}
+  if(pw!==confirm){msg.textContent="Passwords don't match.";msg.hidden=false;return}
+  btn.disabled=true;
+  try{const {error}=await sb.auth.updateUser({password:pw});if(error)throw error;$('#newPassword').value='';$('#newPasswordConfirm').value='';msg.textContent='Password changed.';msg.hidden=false;toast('Password changed')}
+  catch(err){console.error('Softleaf sync: password change failed',err);msg.textContent=err.message||'Could not change the password — try again.';msg.hidden=false}
+  btn.disabled=false;
+};
 
 // ---- First-launch welcome/sign-in gate (mirrors a simple one-screen onboarding) ----
+// "continue on this device" never touches the network, so it can never get anyone stuck.
 const LAUNCH_SEEN_KEY='softleaf-launch-seen';
 let launchGate=null;
 if(sb&&!localStorage.getItem(LAUNCH_SEEN_KEY)){
@@ -1563,12 +1592,15 @@ if(sb&&!localStorage.getItem(LAUNCH_SEEN_KEY)){
     <h1>Softleaf</h1>
     <p>Sync this journal across your devices, or keep it just on this one — you can always change your mind later from the shelf.</p>
     <input id="launchEmail" type="email" placeholder="you@example.com" autocomplete="email">
-    <p id="launchLinkSent" class="sync-copy" hidden>Check your email — open the link on this device to finish signing in.</p>
-    <button class="btn primary" id="launchSendLink">email me a sign-in link</button>
+    <input id="launchPassword" type="password" placeholder="••••••••" autocomplete="current-password">
+    <p id="launchAuthError" class="sync-copy" hidden></p>
+    <button class="btn primary" id="launchSignIn">sign in</button>
+    <button class="btn" id="launchSignUp">create account instead</button>
     <button class="btn" id="launchSkip">continue on this device</button>
   </div>`;
   document.body.append(launchGate);
-  $('#launchSendLink').onclick=()=>sendMagicLink($('#launchEmail').value.trim(),$('#launchLinkSent'),$('#launchSendLink'));
+  $('#launchSignIn').onclick=()=>signInOrUp('signin',$('#launchEmail').value.trim(),$('#launchPassword').value,$('#launchAuthError'),[$('#launchSignIn'),$('#launchSignUp')]);
+  $('#launchSignUp').onclick=()=>signInOrUp('signup',$('#launchEmail').value.trim(),$('#launchPassword').value,$('#launchAuthError'),[$('#launchSignIn'),$('#launchSignUp')]);
   $('#launchSkip').onclick=()=>dismissLaunchGate();
 }
 function dismissLaunchGate(){localStorage.setItem(LAUNCH_SEEN_KEY,'1');launchGate?.remove();launchGate=null}
