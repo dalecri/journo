@@ -453,7 +453,7 @@ body>.theme-picker{position:fixed;left:20px;right:auto;top:auto;bottom:max(16px,
 .bookmark-control{top:0;right:28px;width:25px;height:62px;min-height:0;padding:0;border:0;border-radius:0;background:#b65b60!important;clip-path:polygon(0 0,100% 0,100% 100%,50% 81%,0 100%);opacity:.38;box-shadow:none;transition:height .2s,opacity .2s}.bookmark-control svg{display:none}.bookmark-control[aria-pressed="true"]{opacity:1;height:70px;background:#b65b60!important}.bookmark-control:hover,.bookmark-control:focus-visible{opacity:1}.bookmark-control:focus-visible{filter:brightness(1.3)}
 #fullDate{cursor:pointer;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:4px;text-decoration-color:#8b806455}
 .codeitem{background:#f6f3e9;border:1px solid #c5bc9b;border-radius:5px;min-width:180px;min-height:105px;padding:12px;box-shadow:2px 5px 12px #30281914}.codeitem .content{display:flex;flex-direction:column;gap:8px}.code-head{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:11px;color:#6f6955;flex:none}.code-controls{display:flex;gap:4px}.code-controls button{border:1px solid #c9c3af;border-radius:6px;background:#fff9;min-height:32px;padding:4px 7px;font-size:11px}.code-preview{white-space:pre;overflow:hidden;margin:0;min-height:0;flex:1;color:#394b49;font:12px/1.65 var(--mono);cursor:pointer}.code-preview:empty:before{content:'// a little idea…';color:#807d6d}.codeitem .tape-handle{width:52px}.code-editor-sheet{width:min(800px,94vw);height:82dvh;display:flex;flex-direction:column}.code-editor-sheet textarea{flex:1;min-height:100px;resize:none;white-space:pre;tab-size:2;font:16px/1.7 var(--mono);background:#f6f3e9;color:#394b49}.code-editor-sheet .row{flex:none}
-@media(max-width:900px){.layout{padding:max(9px,env(safe-area-inset-top)) 9px calc(56px + env(safe-area-inset-bottom))}.bookmark-control{right:20px;width:22px;height:51px}.bookmark-control[aria-pressed="true"]{height:60px}body>.theme-picker{left:18px;bottom:max(14px,env(safe-area-inset-bottom))}.mobile-nav{bottom:max(8px,env(safe-area-inset-bottom))}.bookwrap{padding:0}.placed.dayline{width:76%!important}}
+@media(max-width:900px){.layout{padding:max(9px,env(safe-area-inset-top)) 9px calc(56px + env(safe-area-inset-bottom))}.bookmark-control{right:20px;width:22px;height:51px}.bookmark-control[aria-pressed="true"]{height:60px}body>.theme-picker{left:18px;bottom:max(14px,env(safe-area-inset-bottom))}.mobile-nav{bottom:max(8px,env(safe-area-inset-bottom))}.bookwrap{padding:0}}
 
 
 .codeitem{background:#1e1f26;border:1px solid #373946;border-radius:9px;padding:0;box-shadow:0 9px 20px #0003;color:#e5e7ef;overflow:visible;min-height:120px}.codeitem .content{gap:0;border-radius:9px;overflow:hidden}.code-head{padding:9px 10px;background:#282a35;border-bottom:1px solid #373946;color:#bdc2d6;min-height:43px}.code-filename{font-size:11px;font-weight:600;letter-spacing:.03em}.code-controls button{background:#343744;border:1px solid #4c5061;color:#d6daeb;font-size:11px;min-height:28px}.code-preview{padding:10px 0;font:12px/1.8 var(--mono);color:#e0e3ec;counter-reset:line;tab-size:2}.code-line{display:block;min-height:1.8em;white-space:pre;padding-right:12px}.code-line:before{counter-increment:line;content:counter(line);display:inline-block;width:32px;text-align:right;margin-right:14px;color:#68718a;user-select:none}.token-comment{color:#8190a5;font-style:italic}.token-string{color:#b8df8c}.token-keyword{color:#dba5f7}.token-number{color:#f3b878}.token-tag{color:#7edce2}
@@ -474,7 +474,7 @@ body>.theme-picker{position:fixed;left:20px;right:auto;top:auto;bottom:max(16px,
 .notebook-shelf{position:fixed;inset:0;z-index:110;background:radial-gradient(ellipse at 50% 25%,var(--desk-glow),var(--desk) 78%);color:#edf2ff;display:none;flex-direction:column;padding:max(22px,env(safe-area-inset-top)) 0 max(18px,env(safe-area-inset-bottom));overflow:hidden}.notebook-shelf.open{display:flex}.shelf-heading{display:flex;align-items:center;justify-content:space-between;padding:0 24px;gap:12px}.shelf-heading h1{font-size:20px;font-weight:500}.shelf-heading button{border:1px solid #ffffff30;background:#ffffff0c;border-radius:50%;color:inherit;width:42px;height:42px}.notebook-carousel{display:flex;align-items:center;gap:40px;flex:1;min-height:0;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;padding:30px max(28px,calc((100vw - 320px)/2));scrollbar-width:none}.notebook-card{flex:0 0 300px;max-width:75vw;scroll-snap-align:center;text-align:center}.notebook-cover{position:relative;width:100%;aspect-ratio:3/4;max-height:58dvh;border:0;border-radius:5px 23px 23px 5px;background:var(--cover);box-shadow:inset 10px 0 0 #0000000c,inset 16px 0 0 #ffffff18,7px 8px 0 #ece6d3,10px 12px 30px #0005;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;color:#333a37;cursor:pointer;padding:30px}.notebook-cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}.cover-emoji{font-size:64px;position:relative}.cover-title{position:relative;border:1px solid #333a3750;background:#fff9;padding:12px 18px;font-size:16px;line-height:1.5;max-width:95%;overflow-wrap:anywhere}.notebook-card h2{font-size:16px;margin:25px 0 5px;font-weight:500}.notebook-card p{font-size:12px;color:#d4d0bc}.notebook-card>button:not(.notebook-cover){background:transparent;border:0;color:#d4d0bc;text-decoration:underline;text-underline-offset:4px;font-size:12px;min-height:36px}.shelf-hint{font-size:12px;text-align:center;color:#b4b19d;margin:0}.cover-form-row{display:flex;gap:12px}.cover-form-row label{flex:1}.cover-form-row input[type=color]{height:44px}.modal{z-index:130}
 .flip-sheet.next.active{animation:paperForward .66s linear forwards}.flip-sheet.prev.active{animation:paperBackward .66s linear forwards}.flip-face{backface-visibility:hidden;-webkit-backface-visibility:hidden}
 @media(min-width:601px) and (max-width:1366px){.mobile-nav,body>.theme-picker{display:none!important}.layout{padding:18px 20px;height:100dvh}.mobile-themes{display:flex}.book{border-radius:14px;box-shadow:0 14px 40px #0003}.bookwrap{height:100%}}
-@media(max-width:600px){.layout{padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}.shelf-trigger{top:10px;left:6px;width:23px}.notebook-carousel{gap:30px}.notebook-card{flex-basis:260px}.notebook-cover{max-height:55dvh}.placed.dayline{left:10%!important}.flip-sheet{width:100%!important}}
+@media(max-width:600px){.layout{padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}.shelf-trigger{top:10px;left:6px;width:23px}.notebook-carousel{gap:30px}.notebook-card{flex-basis:260px}.notebook-cover{max-height:55dvh}.flip-sheet{width:100%!important}}
 
 
 /* Clear separation between rich desk colors and the lighter book covers. */
@@ -541,6 +541,9 @@ body{background:#151b27}.notebook-card h2{color:#f0f3fa}.notebook-card p,.notebo
 .shelf-trigger{top:0!important;left:0!important;width:34px!important;height:34px!important;padding:0;opacity:1;overflow:hidden;border:0;border-radius:0;background:linear-gradient(135deg,#151b27 0 47%,transparent 48%);z-index:67;filter:drop-shadow(2px 2px 2px #18243326);cursor:pointer}.shelf-trigger:after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--binding),var(--paper));clip-path:polygon(100% 0,100% 100%,0 100%);box-shadow:inset -1px -1px 0 #ffffff99}.shelf-trigger svg{display:none}.shelf-trigger:hover{width:39px!important;height:39px!important}.shelf-trigger:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
 .notebook-paper-options{margin:0;border:0;padding:0}.notebook-paper-options legend{margin-bottom:7px}.notebook-paper-options>div{display:grid;grid-template-columns:repeat(4,1fr);gap:5px}.notebook-paper-options button{min-height:44px;padding:7px 3px;font-size:11px;border:1px solid #dce2e6;border-radius:8px;background:#fff;color:#607181}.notebook-paper-options button[aria-pressed=true]{border-color:#465e75;background:#eaf0f4;color:#263b51}.cover-title,.cover-preview-name{display:none!important}
 
+
+/* Element boxes have authored pixel geometry; viewport fitting never resizes them. */
+.board>.item,.board>.placed{max-width:none!important;max-height:none!important;min-width:0!important;min-height:0!important}
 </style>
 </head>
 <body>
@@ -738,29 +741,45 @@ function openModal(id){$('#'+id).classList.add('open')}
 function closeModal(id){$('#'+id).classList.remove('open')}
 $$('[data-close]').forEach(b=>b.onclick=()=>closeModal(b.dataset.close));
 
-// Board items are stored as percentages of the board's own size, kept as two
-// independent arrangements — one per orientation "mode" (phone/portrait vs
-// spread/landscape) — the same way the anchored pieces (photo, tasks, moment…)
-// already work. That way each orientation keeps its own layout instead of one
-// arrangement being stretched or squashed into the other.
-function pxToPct(px,dim){return dim?px/dim*100:0}
-function pctToPx(pct,dim){return dim?pct/100*dim:0}
+// Element content is shared; authored geometry is independent per orientation.
+// CSS breakpoints only change the paper presentation, never stored coordinates.
+let mountedLayout=orientationLayout(),restoringLayout=false;
+function orientationLayout(){return innerWidth>innerHeight?'landscape':'portrait'}
+function layoutGeometry(o){return {x:o.x,y:o.y,w:o.w,h:o.h,z:o.z,rot:o.rot}}
+function legacyLayoutName(){return innerWidth<=900?'phone':'spread'}
+function sharedPageItems(e){
+  if(e.itemLayoutVersion===2)return e.items||[];
+  const records=new Map();
+  for(const list of [e.items||[],e.itemsByMode?.[legacyLayoutName()]||[],...Object.values(e.itemsByMode||{})])
+    for(const item of list)if(!records.has(item.id))records.set(item.id,{...item});
+  return [...records.values()];
+}
+function firstLayoutGeometry(item,index,e){
+  const legacy=e.itemsByMode?.[legacyLayoutName()]?.find(o=>o.id===item.id);
+  // Convert the old percentage layout once, on its first use at this viewport.
+  if(legacy)return {x:legacy.x*board.clientWidth/100,y:legacy.y*board.clientHeight/100,w:legacy.w*board.clientWidth/100,h:legacy.h*board.clientHeight/100,z:legacy.z,rot:legacy.rot};
+  if(e.itemLayoutVersion!==2&&e.items?.some(o=>o.id===item.id))return layoutGeometry(item);
+  const oldPercent=e.itemLayoutVersion!==2?Object.values(e.itemsByMode||{}).flat().find(o=>o.id===item.id):null;
+  const other=Object.values(e.itemLayouts||{}).map(layout=>layout[item.id]).find(Boolean)||(oldPercent?{...oldPercent,w:oldPercent.w*board.clientWidth/100,h:oldPercent.h*board.clientHeight/100}:item);
+  // A new orientation gets a staggered pile. Preserve authored dimensions exactly.
+  const w=Number(other.w)||180,h=Number(other.h)||120,step=index%8;
+  return {x:Math.max(8,Math.min(22+step*15,board.clientWidth-w-12)),y:Math.max(40,Math.min(70+step*30,board.clientHeight-60)),w,h,z:other.z||index+10,rot:other.rot||0};
+}
 function currentModeItems(e){
-  const stored=e.itemsByMode&&e.itemsByMode[modeKey()];
-  if(stored)return stored.map(o=>({...o,x:pctToPx(o.x,board.clientWidth),y:pctToPx(o.y,board.clientHeight),w:pctToPx(o.w,board.clientWidth),h:pctToPx(o.h,board.clientHeight)}));
-  return e.items||[];
+  return sharedPageItems(e).map((item,index)=>({...item,...(e.itemLayouts?.[mountedLayout]?.[item.id]||firstLayoutGeometry(item,index,e))}));
 }
 function save(show=true){
-  const e=getEntry();
-  const itemsByMode={...(e.itemsByMode||{})};
-  itemsByMode[modeKey()]=serializeItems();
-  Object.assign(e,{body:editor.innerHTML,caption:caption.innerText.trim(),prompt:promptEl.innerText.trim(),enabledPieces:typeof enabledPagePieces==='function'?enabledPagePieces():e.enabledPieces,itemsByMode,paper:board.dataset.paper||'dots',boardGrid:board.classList.contains('gridbg'),todos:readTodos(),placements:typeof capturePlacements==='function'?capturePlacements():e.placements});
-  delete e.items;
+  if(restoringLayout)return;
+  const e=getEntry(),items=serializeItems();
+  const itemLayouts={...(e.itemLayouts||{}),[mountedLayout]:Object.fromEntries(items.map(o=>[o.id,layoutGeometry(o)]))};
+  const live=new Set(items.map(o=>o.id));
+  for(const mode of Object.keys(itemLayouts))itemLayouts[mode]=Object.fromEntries(Object.entries(itemLayouts[mode]).filter(([id])=>live.has(id)));
+  Object.assign(e,{body:editor.innerHTML,caption:caption.innerText.trim(),prompt:promptEl.innerText.trim(),enabledPieces:typeof enabledPagePieces==='function'?enabledPagePieces():e.enabledPieces,items,itemLayouts,itemLayoutVersion:2,paper:board.dataset.paper||'dots',boardGrid:board.classList.contains('gridbg'),todos:readTodos(),pieceLayouts:typeof capturePlacements==='function'?capturePlacements():e.pieceLayouts});
   if(setEntry(e)){localStorage.setItem('softleaf-last-date:'+activeNotebook,selected);if(show)toast('saved')}
 }
 function serializeItems(){
   return [...board.querySelectorAll('.item')].map(el=>({
-    id:el.dataset.id,type:el.dataset.type,x:pxToPct(parseFloat(el.style.left)||0,board.clientWidth),y:pxToPct(parseFloat(el.style.top)||0,board.clientHeight),w:pxToPct(parseFloat(el.style.width)||el.offsetWidth,board.clientWidth),h:pxToPct(parseFloat(el.style.height)||el.offsetHeight,board.clientHeight),z:parseInt(el.style.zIndex)||1,rot:parseFloat(el.dataset.rot)||0,
+    id:el.dataset.id,type:el.dataset.type,x:parseFloat(el.style.left)||0,y:parseFloat(el.style.top)||0,w:parseFloat(el.style.width)||el.offsetWidth,h:parseFloat(el.style.height)||el.offsetHeight,z:parseInt(el.style.zIndex)||1,rot:parseFloat(el.dataset.rot)||0,
     html:['rating','habits','media','swatches','doodle','richlink','quote','tally'].includes(el.dataset.type)?el.dataset.payload:el.dataset.type==='week'||el.dataset.type==='calendar'||el.dataset.type==='rawphoto'||el.dataset.type==='link'||el.dataset.type==='code'||el.dataset.type==='photo'||el.dataset.type==='map'||el.dataset.type==='sticker'||el.dataset.type==='tape'||el.dataset.type==='shape'?el.dataset.payload:(el.querySelector('.content')?.innerHTML||'')
   }))
 }
@@ -1064,7 +1083,7 @@ const nav=$('.mobile-nav');nav.insertAdjacentHTML('afterbegin','<button id="prev
 function soundLabel(){$('#soundToggle').textContent=soundEnabled?'♪ on':'♪ off';$('#soundToggle').setAttribute('aria-pressed',String(soundEnabled))}soundLabel();$('#soundToggle').onclick=()=>{soundEnabled=!soundEnabled;localStorage.setItem('softleaf-sound',soundEnabled);soundLabel();feedback()};
 const originalLoad=load;load=function(){originalLoad();textPage=0;todoPage=0;requestAnimationFrame(()=>{paginateText();paginateTodos();fitItems()})};
 for(const id of ['showMemory','showWrite']){const previous=$('#'+id).onclick;$('#'+id).onclick=()=>{previous();feedback(true);requestAnimationFrame(()=>{paginateText();paginateTodos();fitItems()})}}
-function fitItems(){if(!board.clientHeight)return;[...board.querySelectorAll('.item')].forEach(el=>{el.style.maxWidth=board.clientWidth+'px';el.style.maxHeight=board.clientHeight+'px';el.style.left=Math.max(0,Math.min(parseFloat(el.style.left)||0,board.clientWidth-el.offsetWidth-8))+'px';el.style.top=Math.max(34,Math.min(parseFloat(el.style.top)||0,board.clientHeight-el.offsetHeight-8))+'px'})}
+function fitItems(){/* Authored geometry must never change on resize or insertion. */}
 new MutationObserver(()=>requestAnimationFrame(fitItems)).observe(board,{childList:true});
 new ResizeObserver(()=>{paginateText();paginateTodos();fitItems()}).observe($('#book'));
 let autosave;document.addEventListener('input',e=>{if(!e.target.closest('.flip-sheet')&&e.target.closest('[contenteditable],#location')){clearTimeout(autosave);autosave=setTimeout(()=>save(false),300)}});document.addEventListener('visibilitychange',()=>{if(document.hidden)save(false)});window.addEventListener('pagehide',()=>save(false));
@@ -1090,11 +1109,24 @@ const writingCard=document.createElement('div');writingCard.className='writing-c
 const pieces=[['date',$('.dayline')],['photo',$('.photo-card')],['tasks',$('.todo-card')],['moment',$('.moment')],['writing',writingCard]];
 let layoutReady=false;
 function modeKey(){return innerWidth<=900?'phone':'spread'}
-function capturePlacements(){const old=getEntry().placements||{};if(!layoutReady)return old;const positions={};for(const [id,el] of pieces)positions[id]={x:parseFloat(el.style.left),y:parseFloat(el.style.top),w:parseFloat(el.style.width),h:parseFloat(el.style.height),z:parseInt(el.style.zIndex)||2,rot:Number.isFinite(parseFloat(el.dataset.rot))?parseFloat(el.dataset.rot):(id==='photo'?-2:0)};return {...old,[modeKey()]:positions}}
-function placePieces(){const phone=modeKey()==='phone';const fallback=phone?{date:[5,2,76,7],photo:[6,14,40,29],tasks:[53,14,42,29],moment:[40,42,54,16],writing:[5,60,89,30],location:[5,93,73,5]}:{date:[5,3,37,7],photo:[8,17,29,44],tasks:[8,67,31,26],moment:[57,10,34,22],writing:[54,39,40,50],location:[54,93,32,5]};const saved=getEntry().placements?.[modeKey()]||{};pieces.forEach(([id,el])=>{const v=saved[id]||Object.fromEntries(['x','y','w','h'].map((k,i)=>[k,fallback[id][i]]));el.style.left=v.x+'%';el.style.top=v.y+'%';el.style.width=v.w+'%';el.style.height=v.h+'%';el.style.zIndex=v.z||2;el.dataset.rot=v.rot??(id==='photo'?-2:0);el.style.transform='rotate('+el.dataset.rot+'deg)';zCounter=Math.max(zCounter,v.z||2)});layoutReady=true;requestAnimationFrame(()=>{paginateText();paginateTodos()})}
+function capturePlacements(){
+ const e=getEntry(),old=e.pieceLayouts||{};if(!layoutReady)return old;
+ const positions={};for(const [id,el] of pieces)positions[id]={x:parseFloat(el.style.left),y:parseFloat(el.style.top),w:parseFloat(el.style.width),h:parseFloat(el.style.height),z:parseInt(el.style.zIndex)||2,rot:parseFloat(el.dataset.rot)||0};
+ return {...old,[mountedLayout]:positions};
+}
+function placePieces(){
+ const e=getEntry(),phone=modeKey()==='phone';
+ const fallback=phone?{date:[5,2,76,7],photo:[6,14,40,29],tasks:[53,14,42,29],moment:[40,42,54,16],writing:[5,60,89,30]}:{date:[5,3,37,7],photo:[8,17,29,44],tasks:[8,67,31,26],moment:[57,10,34,22],writing:[54,39,40,50]};
+ pieces.forEach(([id,el])=>{
+   let v=e.pieceLayouts?.[mountedLayout]?.[id];
+   if(!v){const other=Object.values(e.pieceLayouts||{}).map(layout=>layout[id]).find(Boolean);if(other)v={...other,x:16+(pieces.findIndex(([name])=>name===id)%4)*14,y:id==='date'?14:70+pieces.findIndex(([name])=>name===id)*36}}
+   if(!v){const old=e.placements?.[legacyLayoutName()]?.[id],d=fallback[id];v={x:(old?.x??d[0])*board.clientWidth/100,y:(old?.y??d[1])*board.clientHeight/100,w:(old?.w??d[2])*board.clientWidth/100,h:(old?.h??d[3])*board.clientHeight/100,z:old?.z||2,rot:old?.rot??(id==='photo'?-2:0)}}
+   el.style.left=v.x+'px';el.style.top=v.y+'px';el.style.width=v.w+'px';el.style.height=v.h+'px';el.style.zIndex=v.z||2;el.dataset.rot=v.rot||0;el.style.transform='rotate('+el.dataset.rot+'deg)';zCounter=Math.max(zCounter,v.z||2);
+ });layoutReady=true;requestAnimationFrame(()=>{paginateText();paginateTodos()});
+}
 function movable(el,id){el.classList.add('placed');el.dataset.piece=id;const handle=document.createElement('button');handle.className='tape-handle';handle.innerHTML=icon('grip');handle.setAttribute('aria-label',`Move ${id}; drag or use arrow keys`);handle.title='Drag tape to move';const resize=document.createElement('button');resize.className='piece-resize';resize.innerHTML='';resize.setAttribute('aria-label',`Resize ${id}`);el.append(handle,resize);
- function gesture(e,sizing){e.preventDefault();e.stopPropagation();const target=e.currentTarget;target.setPointerCapture(e.pointerId);const rect=board.getBoundingClientRect(),start={x:e.clientX,y:e.clientY,l:el.offsetLeft,t:el.offsetTop,w:el.offsetWidth,h:el.offsetHeight};el.classList.add('is-moving');feedback();const move=ev=>{if(sizing){el.style.width=Math.max(100,Math.min(rect.width-start.l,start.w+ev.clientX-start.x))/rect.width*100+'%';el.style.height=Math.max(55,Math.min(rect.height-start.t,start.h+ev.clientY-start.y))/rect.height*100+'%';paginateText();paginateTodos()}else{el.style.left=Math.max(0,Math.min(rect.width-el.offsetWidth,start.l+ev.clientX-start.x))/rect.width*100+'%';el.style.top=Math.max(14,Math.min(rect.height-el.offsetHeight,start.t+ev.clientY-start.y))/rect.height*100+'%'}};const end=()=>{target.removeEventListener('pointermove',move);target.removeEventListener('pointerup',end);target.removeEventListener('pointercancel',end);el.classList.remove('is-moving');save(false)};target.addEventListener('pointermove',move);target.addEventListener('pointerup',end);target.addEventListener('pointercancel',end)}
- handle.onpointerdown=e=>gesture(e,false);resize.onpointerdown=e=>gesture(e,true);handle.onkeydown=e=>{if(!e.key.startsWith('Arrow'))return;e.preventDefault();e.stopPropagation();const n=e.shiftKey?3:1;el.style.left=Math.max(0,Math.min(100-parseFloat(el.style.width),parseFloat(el.style.left)+(e.key==='ArrowRight'?n:e.key==='ArrowLeft'?-n:0)))+'%';el.style.top=Math.max(2,Math.min(100-parseFloat(el.style.height),parseFloat(el.style.top)+(e.key==='ArrowDown'?n:e.key==='ArrowUp'?-n:0)))+'%';save(false)};
+ function gesture(e,sizing){e.preventDefault();e.stopPropagation();const target=e.currentTarget;target.setPointerCapture(e.pointerId);const rect=board.getBoundingClientRect(),start={x:e.clientX,y:e.clientY,l:el.offsetLeft,t:el.offsetTop,w:el.offsetWidth,h:el.offsetHeight};el.classList.add('is-moving');feedback();const move=ev=>{if(sizing){el.style.width=Math.max(100,Math.min(rect.width-start.l,start.w+ev.clientX-start.x))+'px';el.style.height=Math.max(55,Math.min(rect.height-start.t,start.h+ev.clientY-start.y))+'px';paginateText();paginateTodos()}else{el.style.left=Math.max(0,Math.min(rect.width-el.offsetWidth,start.l+ev.clientX-start.x))+'px';el.style.top=Math.max(14,Math.min(rect.height-el.offsetHeight,start.t+ev.clientY-start.y))+'px'}};const end=()=>{target.removeEventListener('pointermove',move);target.removeEventListener('pointerup',end);target.removeEventListener('pointercancel',end);el.classList.remove('is-moving');save(false)};target.addEventListener('pointermove',move);target.addEventListener('pointerup',end);target.addEventListener('pointercancel',end)}
+ handle.onpointerdown=e=>gesture(e,false);resize.onpointerdown=e=>gesture(e,true);handle.onkeydown=e=>{if(!e.key.startsWith('Arrow'))return;e.preventDefault();e.stopPropagation();const n=e.shiftKey?15:3;el.style.left=Math.max(0,parseFloat(el.style.left)+(e.key==='ArrowRight'?n:e.key==='ArrowLeft'?-n:0))+'px';el.style.top=Math.max(2,parseFloat(el.style.top)+(e.key==='ArrowDown'?n:e.key==='ArrowUp'?-n:0))+'px';save(false)};
 }
 pieces.forEach(([id,el])=>{board.append(el);movable(el,id)});tabs.remove();$('.palette').remove();$('.journal-help').remove();$('.streak').remove();$('#showMemory').remove();$('#showWrite').remove();$('#book').classList.remove('show-left');
 const add=document.createElement('button');add.className='add-piece';iconButton(add,'plus','Add to this page');add.setAttribute('aria-expanded','false');const menu=document.createElement('div');menu.className='add-menu';menu.setAttribute('aria-label','Add an element');
@@ -1107,22 +1139,18 @@ const previousRenderItem=renderItem;renderItem=function(o){const el=previousRend
 function decorateItem(el){if(!el.querySelector('.tape-handle')){const tape=document.createElement('span');tape.className='tape-handle';tape.innerHTML=icon('grip');tape.title='Drag to move';el.append(tape)}for(const [act,name] of [['front','front'],['rotate','rotate'],['dup','copy'],['del','close']])iconButton(el.querySelector(`[data-act="${act}"]`),name,act==='del'?'Remove element':act==='dup'?'Duplicate element':act==='front'?'Bring forward':'Rotate element')}
 [...board.querySelectorAll('.item')].forEach(decorateItem);new MutationObserver(refreshIcons).observe($('#todoList'),{childList:true});
 const heartAction=$('#heartBtn').onclick;$('#heartBtn').onclick=()=>{heartAction();refreshIcons()};
-// Crossing the phone/spread breakpoint (e.g. rotating an iPad mini) swaps in
-// that orientation's own saved item arrangement, after tucking the old one
-// away under the mode it belongs to — mirroring how the pieces already behave.
-let lastMode=modeKey();window.addEventListener('resize',()=>{
-  const newMode=modeKey();
-  if(newMode!==lastMode){
-    const e=getEntry();
-    const itemsByMode={...(e.itemsByMode||{})};
-    itemsByMode[lastMode]=serializeItems();
-    Object.assign(e,{itemsByMode});
-    delete e.items;
-    setEntry(e);
-    lastMode=newMode;
-    placePieces();
-    loadItemsForCurrentMode(getEntry());
-  }
+// Capture the outgoing DOM under its mounted orientation, never the new viewport.
+let layoutViewportWidth=innerWidth;
+window.addEventListener('resize',()=>{
+ const next=orientationLayout();
+ const editing=document.activeElement?.matches('input,textarea,[contenteditable="true"]');
+ if(editing&&Math.abs(innerWidth-layoutViewportWidth)<2)return; // software keyboard
+ layoutViewportWidth=innerWidth;
+ if(next===mountedLayout)return;
+ save(false);
+ restoringLayout=true;
+ try{mountedLayout=next;placePieces();loadItemsForCurrentMode(getEntry())}finally{restoringLayout=false}
+ save(false); // freeze the initial stack once, before any further viewport changes
 });
 // Keep newly added layers above fixed pieces; note borders and tape are drag targets.
 board.addEventListener('pointerdown',e=>{if(e.target.closest('.placed,.tape-handle'))swipeActive=false});
@@ -1191,7 +1219,7 @@ function bringToTop(el){const elements=[...board.querySelectorAll('.placed,.item
 board.addEventListener('pointerdown',e=>{const el=e.target.closest('.placed,.item');if(!el)return;bringToTop(el);if(selectedItem&&selectedItem!==el){selectedItem.classList.remove('selected');selectedItem=null}if(el.classList.contains('item'))selectItem(el);save(false)},true);
 board.addEventListener('focusin',e=>{const el=e.target.closest('.placed,.item');if(el){bringToTop(el);save(false)}});
 // Links keep their authored dimensions on every device and have no resize affordance.
-function fixLinkSizes(){board.querySelectorAll('.linkitem').forEach(el=>{el.querySelector('.resize')?.remove();const o=currentModeItems(getEntry()).find(x=>x.id===el.dataset.id);if(o){el.style.width=o.w+'px';el.style.height=o.h+'px'}})}
+function fixLinkSizes(){board.querySelectorAll('.linkitem').forEach(el=>el.querySelector('.resize')?.remove())}
 const shelf=document.createElement('section');shelf.className='notebook-shelf';shelf.setAttribute('aria-label','Your notebooks');shelf.innerHTML='<div class="shelf-heading"><h1>My journos</h1><div><button id="newNotebook" aria-label="New notebook">＋</button></div></div><div class="notebook-carousel"></div><p class="shelf-hint">swipe through · tap a cover to open</p>';document.body.append(shelf);
 const shelfTrigger=document.createElement('button');shelfTrigger.className='shelf-trigger';iconButton(shelfTrigger,'note','My notebooks');$('.bookwrap').append(shelfTrigger);shelfTrigger.onclick=()=>showShelf();
 function showShelf(){save(false);renderShelf();shelf.classList.add('open');$('.app').inert=true;shelf.querySelector('#newNotebook').focus();const active=shelf.querySelector('[data-notebook="'+activeNotebook+'"]');requestAnimationFrame(()=>active?.scrollIntoView({block:'nearest',inline:'center'}))}
@@ -1496,6 +1524,10 @@ board.addEventListener('pointerdown',e=>{const el=e.target.closest('.item,.place
 board.addEventListener('focusin',e=>{const el=e.target.closest('.item,.placed');if(el)selectItem(el)});
 refreshNotebookPaper();
 
+// Commit only after all load wrappers have restored content and optional-piece visibility.
+const completeLayoutLoad=load;
+load=function(){restoringLayout=true;try{completeLayoutLoad()}finally{restoringLayout=false}save(false)};
+save(false);
 })();
 </script>
 </body>
