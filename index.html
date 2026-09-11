@@ -711,7 +711,12 @@ body[data-appearance] .cover-settings-footer .btn.primary{background:var(--app-t
 <input type="file" accept="image/*" id="boardPhotoInput" hidden>
 <div class="toast" id="toast">saved</div>
 
+<!-- Optional: only used if SUPABASE_URL/SUPABASE_ANON_KEY below are filled in. Sign-in is always optional — the app works fully offline without this. -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
+// ---- Fill these in to enable cross-device sync. Leave blank to stay local-only forever. ----
+const SUPABASE_URL='';
+const SUPABASE_ANON_KEY='';
 // ---- IndexedDB-backed replacement for localStorage ----
 // Everything below writes through an in-memory cache (kept in sync) so all the
 // original code can keep calling localStorage.getItem/setItem/key/length exactly
@@ -778,6 +783,34 @@ async function createIndexedDbStorage(){
 }
 (async function(){
 const localStorage=await createIndexedDbStorage();
+// ---- Cloud sync (optional) ----
+// Everything below is inert unless SUPABASE_URL/SUPABASE_ANON_KEY are filled in AND
+// the person actually signs in via the sync button. Until then this app behaves
+// exactly as a local-only, IndexedDB-backed journal — nothing here changes that.
+const sb=(SUPABASE_URL&&SUPABASE_ANON_KEY&&window.supabase)?window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null;
+let syncSession=null,syncStatus='local',syncTimer=null,syncBusy=false,syncUiRefresh=()=>{};
+function snapshotLocalData(){const out={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);out[k]=localStorage.getItem(k)}return out}
+function hydrateLocalData(data){Object.entries(data||{}).forEach(([k,v])=>_rawSetItem(k,v))}
+async function pushSnapshot(){
+  if(!sb||!syncSession)return;
+  syncBusy=true;syncStatus='syncing';syncUiRefresh();
+  try{await sb.from('journal_sync').upsert({user_id:syncSession.user.id,data:snapshotLocalData(),updated_at:new Date().toISOString()});syncStatus='synced'}
+  catch(err){console.error('Softleaf sync: push failed',err);syncStatus='error'}
+  syncBusy=false;syncUiRefresh();
+}
+function scheduleSync(){if(!sb||!syncSession)return;syncStatus='syncing';syncUiRefresh();clearTimeout(syncTimer);syncTimer=setTimeout(pushSnapshot,1500)}
+async function pullOrPushInitial(){
+  syncStatus='syncing';syncUiRefresh();
+  try{
+    const {data,error}=await sb.from('journal_sync').select('data').eq('user_id',syncSession.user.id).maybeSingle();
+    if(error)throw error;
+    if(data){hydrateLocalData(data.data);toast('Synced — reloading your journal');setTimeout(()=>location.reload(),650);return}
+    await pushSnapshot();
+  }catch(err){console.error('Softleaf sync: initial sync failed',err);syncStatus='error';syncUiRefresh()}
+}
+const _rawSetItem=localStorage.setItem.bind(localStorage),_rawRemoveItem=localStorage.removeItem.bind(localStorage);
+localStorage.setItem=(k,v)=>{_rawSetItem(k,v);scheduleSync()};
+localStorage.removeItem=(k)=>{_rawRemoveItem(k);scheduleSync()};
 var widgetCanvasObserver,widgetDrawers=new Map();
 const coverThemes=[
  ['blood-red','Blood Red','#630700','#FF97D0'],['pastel-magenta','Pastel Magenta','#FF97D0','#125603'],
@@ -1459,6 +1492,74 @@ const appearanceButton=document.createElement('button');appearanceButton.classNa
 function refreshAppearance(){applyNotebookTheme();appearanceButton.innerHTML=icon(appAppearance==='dark'?'sun':'moon');appearanceButton.setAttribute('aria-label',appAppearance==='dark'?'Switch to light appearance':'Switch to dark appearance');appearanceButton.title=appAppearance==='dark'?'Light appearance':'Dark appearance'}
 iconPaths.sun='M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1 1M18 18l1 1M5 19l1-1M18 6l1-1';iconPaths.moon='M20 14A8 8 0 0 1 10 4a8 8 0 1 0 10 10Z';
 appearanceButton.onclick=()=>{appAppearance=appAppearance==='dark'?'light':'dark';localStorage.setItem('softleaf-appearance',appAppearance);refreshAppearance()};
+
+// ---- Sync button + modal (optional; no-ops entirely if sb is null) ----
+iconPaths.cloud='M7 18a4 4 0 0 1-1-7.9 5 5 0 0 1 9.8-1.9A4.5 4.5 0 0 1 17 18z';
+const syncButton=document.createElement('button');syncButton.className='appearance-button';syncButton.hidden=!sb;iconButton(syncButton,'cloud','Sync across devices');shelf.querySelector('.shelf-heading>div').prepend(syncButton);
+const syncModal=document.createElement('div');syncModal.className='modal';syncModal.id='syncModal';syncModal.setAttribute('role','dialog');syncModal.setAttribute('aria-modal','true');syncModal.setAttribute('aria-label','Sync across devices');
+syncModal.innerHTML=`<div class="sheet">
+  <h3>Sync across devices</h3>
+  <p class="sync-copy">Sign in with your email to keep this journal in sync everywhere. Skip it and everything stays only on this device.</p>
+  <div id="syncSignedOut">
+    <label for="syncEmail">Email</label>
+    <input id="syncEmail" type="email" placeholder="you@example.com" autocomplete="email">
+    <div class="row"><button class="btn" id="skipSync">use this device only</button><button class="btn primary" id="sendSyncCode">send code</button></div>
+    <div id="syncCodeStep" hidden>
+      <label for="syncCode">6-digit code</label>
+      <input id="syncCode" inputmode="numeric" maxlength="6" placeholder="123456">
+      <div class="row"><button class="btn" id="cancelSyncCode">back</button><button class="btn primary" id="verifySyncCode">verify &amp; sign in</button></div>
+    </div>
+  </div>
+  <div id="syncSignedIn" hidden>
+    <p id="syncAccountLine"></p>
+    <p id="syncStatusLine" class="sync-copy"></p>
+    <div class="row"><button class="btn" id="signOutSync">sign out</button><button class="btn primary" id="forceSyncNow">sync now</button></div>
+  </div>
+  <div class="row"><button class="btn" data-close="syncModal">close</button></div>
+</div>`;
+document.body.append(syncModal);
+syncModal.querySelector('[data-close="syncModal"]').onclick=()=>closeModal('syncModal');
+syncModal.onclick=e=>{if(e.target===syncModal)closeModal('syncModal')};
+syncButton.onclick=()=>{renderSyncModal();openModal('syncModal')};
+function renderSyncModal(){
+  const signedIn=!!syncSession;
+  $('#syncSignedOut').hidden=signedIn;$('#syncSignedIn').hidden=!signedIn;
+  if(signedIn){
+    $('#syncAccountLine').textContent='Signed in as '+syncSession.user.email;
+    $('#syncStatusLine').textContent=syncStatus==='syncing'?'Syncing…':syncStatus==='error'?'Could not reach the server — your changes are still saved on this device.':'Up to date.';
+  }else{
+    $('#syncCodeStep').hidden=true;$('#syncEmail').value='';$('#syncCode').value='';
+  }
+}
+syncUiRefresh=()=>{if(syncModal.classList.contains('open'))renderSyncModal()};
+$('#skipSync').onclick=()=>closeModal('syncModal');
+$('#sendSyncCode').onclick=async()=>{
+  const email=$('#syncEmail').value.trim();if(!email){toast('Enter your email first');return}
+  $('#sendSyncCode').disabled=true;
+  try{const {error}=await sb.auth.signInWithOtp({email,options:{shouldCreateUser:true}});if(error)throw error;$('#syncCodeStep').hidden=false;$('#syncCode').focus();toast('Code sent — check your email')}
+  catch(err){console.error('Softleaf sync: send code failed',err);toast('Could not send a code — try again')}
+  $('#sendSyncCode').disabled=false;
+};
+$('#cancelSyncCode').onclick=()=>{$('#syncCodeStep').hidden=true};
+$('#verifySyncCode').onclick=async()=>{
+  const email=$('#syncEmail').value.trim(),token=$('#syncCode').value.trim();if(!token){toast('Enter the code from your email');return}
+  $('#verifySyncCode').disabled=true;
+  try{
+    const {data,error}=await sb.auth.verifyOtp({email,token,type:'email'});if(error)throw error;
+    syncSession=data.session;renderSyncModal();await pullOrPushInitial();
+  }catch(err){console.error('Softleaf sync: verify failed',err);toast('That code didn’t work — try again')}
+  $('#verifySyncCode').disabled=false;
+};
+$('#signOutSync').onclick=async()=>{try{await sb.auth.signOut()}catch{}syncSession=null;syncStatus='local';renderSyncModal();toast('Signed out — this device keeps its own copy')};
+$('#forceSyncNow').onclick=()=>pushSnapshot();
+async function initSync(){
+  if(!sb)return;
+  try{
+    const {data:{session}}=await sb.auth.getSession();
+    if(session){syncSession=session;await pullOrPushInitial()}
+  }catch(err){console.error('Softleaf sync: could not restore session',err)}
+}
+initSync();
 $('#notebookName').addEventListener('input',refreshCoverThemePreview);refreshAppearance();refreshCoverThemePreview();renderShelf();
 
 function widgetGlyph(name){const paths={edit:'m4 20 4-1L20 7l-3-3L5 16zM14 7l3 3',copy:'M8 8h12v13H8zM16 8V3H3v13h5',undo:'M8 5 3 10l5 5M3 10h10a6 6 0 0 1 0 12',pen:'m4 20 4-1L20 7l-3-3L5 16z',erase:'m3 14 9-10 9 8-8 10H9zM8 9l9 8',clear:'M5 7h14M9 7V4h6v3M7 7l1 14h8l1-14',plus:'M12 5v14M5 12h14'};return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="'+(paths[name]||paths.edit)+'"/></svg>'}
