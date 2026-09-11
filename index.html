@@ -552,6 +552,12 @@ body[data-appearance] .notebook-shelf{background:var(--app-bg)!important;color:v
 body[data-appearance] .shelf-hint,body[data-appearance] .notebook-card p,body[data-appearance] .notebook-card>button:not(.notebook-cover){color:var(--app-muted)}
 body[data-appearance] .shelf-heading button{border-color:var(--app-line);background:transparent;color:var(--app-text)}
 .shelf-heading>div{display:flex;gap:10px}.appearance-button svg{width:19px;height:19px}
+#launchGate{position:fixed;inset:0;z-index:200;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px}
+.launch-inner{max-width:320px;width:100%;text-align:center;display:flex;flex-direction:column;gap:12px}
+.launch-inner h1{font-size:24px;margin:0;color:var(--ink);font-weight:600}
+.launch-inner p{font-size:12px;color:var(--muted);margin:0;line-height:1.5}
+.launch-inner input{width:100%;border:1px solid var(--line);border-radius:10px;background:var(--paper);padding:11px;font-size:16px;outline:0;color:var(--ink)}
+.launch-inner .btn{width:100%}
 body[data-appearance] #coverModal .cover-settings,body[data-appearance] .modal .sheet{background:var(--app-panel);color:var(--app-text);border-color:var(--app-line)}
 body[data-appearance] .cover-settings-header h3,body[data-appearance] .cover-settings-header svg{color:var(--app-text)}
 body[data-appearance] .cover-preview-stage,body[data-appearance] .cover-settings-footer{background:var(--app-bg);border-color:var(--app-line)}
@@ -715,8 +721,8 @@ body[data-appearance] .cover-settings-footer .btn.primary{background:var(--app-t
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
 // ---- Fill these in to enable cross-device sync. Leave blank to stay local-only forever. ----
-const SUPABASE_URL='';
-const SUPABASE_ANON_KEY='';
+const SUPABASE_URL='https://sjcebmtkncwtcprewegi.supabase.co';
+const SUPABASE_ANON_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNqY2VibXRrbmN3dGNwcmV3ZWdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkxNDgxMzEsImV4cCI6MjEwNDcyNDEzMX0.TkniyPSkJKL7fdPrZ69pizzszZzyaAYO3UGOFAVwVMc';
 // ---- IndexedDB-backed replacement for localStorage ----
 // Everything below writes through an in-memory cache (kept in sync) so all the
 // original code can keep calling localStorage.getItem/setItem/key/length exactly
@@ -1499,16 +1505,12 @@ const syncButton=document.createElement('button');syncButton.className='appearan
 const syncModal=document.createElement('div');syncModal.className='modal';syncModal.id='syncModal';syncModal.setAttribute('role','dialog');syncModal.setAttribute('aria-modal','true');syncModal.setAttribute('aria-label','Sync across devices');
 syncModal.innerHTML=`<div class="sheet">
   <h3>Sync across devices</h3>
-  <p class="sync-copy">Sign in with your email to keep this journal in sync everywhere. Skip it and everything stays only on this device.</p>
   <div id="syncSignedOut">
+    <p class="sync-copy">Enter your email and we'll send a sign-in link. Open it on this device to finish. Skip it and everything stays only on this device.</p>
     <label for="syncEmail">Email</label>
     <input id="syncEmail" type="email" placeholder="you@example.com" autocomplete="email">
-    <div class="row"><button class="btn" id="skipSync">use this device only</button><button class="btn primary" id="sendSyncCode">send code</button></div>
-    <div id="syncCodeStep" hidden>
-      <label for="syncCode">6-digit code</label>
-      <input id="syncCode" inputmode="numeric" maxlength="6" placeholder="123456">
-      <div class="row"><button class="btn" id="cancelSyncCode">back</button><button class="btn primary" id="verifySyncCode">verify &amp; sign in</button></div>
-    </div>
+    <p id="syncLinkSent" class="sync-copy" hidden>Check your email — open the link on this device to finish signing in.</p>
+    <div class="row"><button class="btn" id="skipSync">use this device only</button><button class="btn primary" id="sendSyncLink">email me a link</button></div>
   </div>
   <div id="syncSignedIn" hidden>
     <p id="syncAccountLine"></p>
@@ -1528,38 +1530,50 @@ function renderSyncModal(){
     $('#syncAccountLine').textContent='Signed in as '+syncSession.user.email;
     $('#syncStatusLine').textContent=syncStatus==='syncing'?'Syncing…':syncStatus==='error'?'Could not reach the server — your changes are still saved on this device.':'Up to date.';
   }else{
-    $('#syncCodeStep').hidden=true;$('#syncEmail').value='';$('#syncCode').value='';
+    $('#syncLinkSent').hidden=true;$('#syncEmail').value='';
   }
 }
-syncUiRefresh=()=>{if(syncModal.classList.contains('open'))renderSyncModal()};
+syncUiRefresh=()=>{if(syncModal.classList.contains('open'))renderSyncModal();renderLaunchGate()};
 $('#skipSync').onclick=()=>closeModal('syncModal');
-$('#sendSyncCode').onclick=async()=>{
-  const email=$('#syncEmail').value.trim();if(!email){toast('Enter your email first');return}
-  $('#sendSyncCode').disabled=true;
-  try{const {error}=await sb.auth.signInWithOtp({email,options:{shouldCreateUser:true}});if(error)throw error;$('#syncCodeStep').hidden=false;$('#syncCode').focus();toast('Code sent — check your email')}
-  catch(err){console.error('Softleaf sync: send code failed',err);toast('Could not send a code — try again')}
-  $('#sendSyncCode').disabled=false;
-};
-$('#cancelSyncCode').onclick=()=>{$('#syncCodeStep').hidden=true};
-$('#verifySyncCode').onclick=async()=>{
-  const email=$('#syncEmail').value.trim(),token=$('#syncCode').value.trim();if(!token){toast('Enter the code from your email');return}
-  $('#verifySyncCode').disabled=true;
-  try{
-    const {data,error}=await sb.auth.verifyOtp({email,token,type:'email'});if(error)throw error;
-    syncSession=data.session;renderSyncModal();await pullOrPushInitial();
-  }catch(err){console.error('Softleaf sync: verify failed',err);toast('That code didn’t work — try again')}
-  $('#verifySyncCode').disabled=false;
-};
+async function sendMagicLink(email,statusEl,btnEl){
+  if(!email){toast('Enter your email first');return}
+  btnEl.disabled=true;
+  try{const {error}=await sb.auth.signInWithOtp({email,options:{shouldCreateUser:true,emailRedirectTo:window.location.href}});if(error)throw error;statusEl.hidden=false;toast('Link sent — check your email')}
+  catch(err){console.error('Softleaf sync: send link failed',err);toast('Could not send a link — try again')}
+  btnEl.disabled=false;
+}
+$('#sendSyncLink').onclick=()=>sendMagicLink($('#syncEmail').value.trim(),$('#syncLinkSent'),$('#sendSyncLink'));
 $('#signOutSync').onclick=async()=>{try{await sb.auth.signOut()}catch{}syncSession=null;syncStatus='local';renderSyncModal();toast('Signed out — this device keeps its own copy')};
 $('#forceSyncNow').onclick=()=>pushSnapshot();
-async function initSync(){
-  if(!sb)return;
-  try{
-    const {data:{session}}=await sb.auth.getSession();
-    if(session){syncSession=session;await pullOrPushInitial()}
-  }catch(err){console.error('Softleaf sync: could not restore session',err)}
+
+// ---- First-launch welcome/sign-in gate (mirrors a simple one-screen onboarding) ----
+const LAUNCH_SEEN_KEY='softleaf-launch-seen';
+let launchGate=null;
+if(sb&&!localStorage.getItem(LAUNCH_SEEN_KEY)){
+  launchGate=document.createElement('div');launchGate.id='launchGate';
+  launchGate.innerHTML=`<div class="launch-inner">
+    <h1>Softleaf</h1>
+    <p>Sync this journal across your devices, or keep it just on this one — you can always change your mind later from the shelf.</p>
+    <input id="launchEmail" type="email" placeholder="you@example.com" autocomplete="email">
+    <p id="launchLinkSent" class="sync-copy" hidden>Check your email — open the link on this device to finish signing in.</p>
+    <button class="btn primary" id="launchSendLink">email me a sign-in link</button>
+    <button class="btn" id="launchSkip">continue on this device</button>
+  </div>`;
+  document.body.append(launchGate);
+  $('#launchSendLink').onclick=()=>sendMagicLink($('#launchEmail').value.trim(),$('#launchLinkSent'),$('#launchSendLink'));
+  $('#launchSkip').onclick=()=>dismissLaunchGate();
 }
-initSync();
+function dismissLaunchGate(){localStorage.setItem(LAUNCH_SEEN_KEY,'1');launchGate?.remove();launchGate=null}
+function renderLaunchGate(){if(launchGate&&syncSession)dismissLaunchGate()}
+
+if(sb)sb.auth.onAuthStateChange((event,session)=>{
+  if((event==='SIGNED_IN'||event==='INITIAL_SESSION')&&session){
+    const isNew=!syncSession||syncSession.user.id!==session.user.id;
+    syncSession=session;renderSyncModal();renderLaunchGate();
+    if(isNew)pullOrPushInitial();
+  }
+  if(event==='SIGNED_OUT'){syncSession=null;syncStatus='local';renderSyncModal()}
+});
 $('#notebookName').addEventListener('input',refreshCoverThemePreview);refreshAppearance();refreshCoverThemePreview();renderShelf();
 
 function widgetGlyph(name){const paths={edit:'m4 20 4-1L20 7l-3-3L5 16zM14 7l3 3',copy:'M8 8h12v13H8zM16 8V3H3v13h5',undo:'M8 5 3 10l5 5M3 10h10a6 6 0 0 1 0 12',pen:'m4 20 4-1L20 7l-3-3L5 16z',erase:'m3 14 9-10 9 8-8 10H9zM8 9l9 8',clear:'M5 7h14M9 7V4h6v3M7 7l1 14h8l1-14',plus:'M12 5v14M5 12h14'};return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="'+(paths[name]||paths.edit)+'"/></svg>'}
