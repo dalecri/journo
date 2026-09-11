@@ -738,16 +738,36 @@ function openModal(id){$('#'+id).classList.add('open')}
 function closeModal(id){$('#'+id).classList.remove('open')}
 $$('[data-close]').forEach(b=>b.onclick=()=>closeModal(b.dataset.close));
 
+// Board items are stored as percentages of the board's own size, kept as two
+// independent arrangements — one per orientation "mode" (phone/portrait vs
+// spread/landscape) — the same way the anchored pieces (photo, tasks, moment…)
+// already work. That way each orientation keeps its own layout instead of one
+// arrangement being stretched or squashed into the other.
+function pxToPct(px,dim){return dim?px/dim*100:0}
+function pctToPx(pct,dim){return dim?pct/100*dim:0}
+function currentModeItems(e){
+  const stored=e.itemsByMode&&e.itemsByMode[modeKey()];
+  if(stored)return stored.map(o=>({...o,x:pctToPx(o.x,board.clientWidth),y:pctToPx(o.y,board.clientHeight),w:pctToPx(o.w,board.clientWidth),h:pctToPx(o.h,board.clientHeight)}));
+  return e.items||[];
+}
 function save(show=true){
   const e=getEntry();
-  Object.assign(e,{body:editor.innerHTML,caption:caption.innerText.trim(),prompt:promptEl.innerText.trim(),enabledPieces:typeof enabledPagePieces==='function'?enabledPagePieces():e.enabledPieces,items:serializeItems(),paper:board.dataset.paper||'dots',boardGrid:board.classList.contains('gridbg'),todos:readTodos(),placements:typeof capturePlacements==='function'?capturePlacements():e.placements});
+  const itemsByMode={...(e.itemsByMode||{})};
+  itemsByMode[modeKey()]=serializeItems();
+  Object.assign(e,{body:editor.innerHTML,caption:caption.innerText.trim(),prompt:promptEl.innerText.trim(),enabledPieces:typeof enabledPagePieces==='function'?enabledPagePieces():e.enabledPieces,itemsByMode,paper:board.dataset.paper||'dots',boardGrid:board.classList.contains('gridbg'),todos:readTodos(),placements:typeof capturePlacements==='function'?capturePlacements():e.placements});
+  delete e.items;
   if(setEntry(e)){localStorage.setItem('softleaf-last-date:'+activeNotebook,selected);if(show)toast('saved')}
 }
 function serializeItems(){
   return [...board.querySelectorAll('.item')].map(el=>({
-    id:el.dataset.id,type:el.dataset.type,x:parseFloat(el.style.left)||0,y:parseFloat(el.style.top)||0,w:parseFloat(el.style.width)||el.offsetWidth,h:parseFloat(el.style.height)||el.offsetHeight,z:parseInt(el.style.zIndex)||1,rot:parseFloat(el.dataset.rot)||0,
+    id:el.dataset.id,type:el.dataset.type,x:pxToPct(parseFloat(el.style.left)||0,board.clientWidth),y:pxToPct(parseFloat(el.style.top)||0,board.clientHeight),w:pxToPct(parseFloat(el.style.width)||el.offsetWidth,board.clientWidth),h:pxToPct(parseFloat(el.style.height)||el.offsetHeight,board.clientHeight),z:parseInt(el.style.zIndex)||1,rot:parseFloat(el.dataset.rot)||0,
     html:['rating','habits','media','swatches','doodle','richlink','quote','tally'].includes(el.dataset.type)?el.dataset.payload:el.dataset.type==='week'||el.dataset.type==='calendar'||el.dataset.type==='rawphoto'||el.dataset.type==='link'||el.dataset.type==='code'||el.dataset.type==='photo'||el.dataset.type==='map'||el.dataset.type==='sticker'||el.dataset.type==='tape'||el.dataset.type==='shape'?el.dataset.payload:(el.querySelector('.content')?.innerHTML||'')
   }))
+}
+function loadItemsForCurrentMode(e){
+  clearItems();
+  currentModeItems(e).forEach(renderItem);
+  updateHint();
 }
 function load(){
   applyGeneratedPalette();
@@ -756,7 +776,7 @@ function load(){
   $('#fullDate').textContent=d.toLocaleDateString(undefined,{month:'long',day:'numeric',year:'numeric'});
   $('#timeLabel').textContent=new Date().toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});
   editor.innerHTML=e.body;caption.textContent=e.caption;promptEl.textContent=e.prompt;heroPhoto.src=e.heroPhoto||art;$('#heartBtn').textContent=e.favorite?'♥':'♡';
-  board.dataset.paper=notebookStore.find(n=>n.id===activeNotebook)?.paper||e.paper||(e.boardGrid?'squares':'dots');board.classList.toggle('gridbg',false);clearItems();(e.items||[]).forEach(renderItem);updateHint();renderDayRail();renderTodos()
+  board.dataset.paper=notebookStore.find(n=>n.id===activeNotebook)?.paper||e.paper||(e.boardGrid?'squares':'dots');board.classList.toggle('gridbg',false);loadItemsForCurrentMode(e);renderDayRail();renderTodos()
 }
 function clearItems(){selectedItem=null;[...board.querySelectorAll('.item')].forEach(x=>x.remove())}
 function updateHint(){$('#boardHint').style.display=[...board.querySelectorAll('.item')].length?'none':'grid'}
@@ -1087,7 +1107,23 @@ const previousRenderItem=renderItem;renderItem=function(o){const el=previousRend
 function decorateItem(el){if(!el.querySelector('.tape-handle')){const tape=document.createElement('span');tape.className='tape-handle';tape.innerHTML=icon('grip');tape.title='Drag to move';el.append(tape)}for(const [act,name] of [['front','front'],['rotate','rotate'],['dup','copy'],['del','close']])iconButton(el.querySelector(`[data-act="${act}"]`),name,act==='del'?'Remove element':act==='dup'?'Duplicate element':act==='front'?'Bring forward':'Rotate element')}
 [...board.querySelectorAll('.item')].forEach(decorateItem);new MutationObserver(refreshIcons).observe($('#todoList'),{childList:true});
 const heartAction=$('#heartBtn').onclick;$('#heartBtn').onclick=()=>{heartAction();refreshIcons()};
-let lastMode=modeKey();window.addEventListener('resize',()=>{if(modeKey()!==lastMode){lastMode=modeKey();placePieces()}});
+// Crossing the phone/spread breakpoint (e.g. rotating an iPad mini) swaps in
+// that orientation's own saved item arrangement, after tucking the old one
+// away under the mode it belongs to — mirroring how the pieces already behave.
+let lastMode=modeKey();window.addEventListener('resize',()=>{
+  const newMode=modeKey();
+  if(newMode!==lastMode){
+    const e=getEntry();
+    const itemsByMode={...(e.itemsByMode||{})};
+    itemsByMode[lastMode]=serializeItems();
+    Object.assign(e,{itemsByMode});
+    delete e.items;
+    setEntry(e);
+    lastMode=newMode;
+    placePieces();
+    loadItemsForCurrentMode(getEntry());
+  }
+});
 // Keep newly added layers above fixed pieces; note borders and tape are drag targets.
 board.addEventListener('pointerdown',e=>{if(e.target.closest('.placed,.tape-handle'))swipeActive=false});
 placePieces();refreshIcons();
@@ -1155,7 +1191,7 @@ function bringToTop(el){const elements=[...board.querySelectorAll('.placed,.item
 board.addEventListener('pointerdown',e=>{const el=e.target.closest('.placed,.item');if(!el)return;bringToTop(el);if(selectedItem&&selectedItem!==el){selectedItem.classList.remove('selected');selectedItem=null}if(el.classList.contains('item'))selectItem(el);save(false)},true);
 board.addEventListener('focusin',e=>{const el=e.target.closest('.placed,.item');if(el){bringToTop(el);save(false)}});
 // Links keep their authored dimensions on every device and have no resize affordance.
-function fixLinkSizes(){board.querySelectorAll('.linkitem').forEach(el=>{el.querySelector('.resize')?.remove();const o=getEntry().items?.find(x=>x.id===el.dataset.id);if(o){el.style.width=o.w+'px';el.style.height=o.h+'px'}})}
+function fixLinkSizes(){board.querySelectorAll('.linkitem').forEach(el=>{el.querySelector('.resize')?.remove();const o=currentModeItems(getEntry()).find(x=>x.id===el.dataset.id);if(o){el.style.width=o.w+'px';el.style.height=o.h+'px'}})}
 const shelf=document.createElement('section');shelf.className='notebook-shelf';shelf.setAttribute('aria-label','Your notebooks');shelf.innerHTML='<div class="shelf-heading"><h1>My journos</h1><div><button id="newNotebook" aria-label="New notebook">＋</button></div></div><div class="notebook-carousel"></div><p class="shelf-hint">swipe through · tap a cover to open</p>';document.body.append(shelf);
 const shelfTrigger=document.createElement('button');shelfTrigger.className='shelf-trigger';iconButton(shelfTrigger,'note','My notebooks');$('.bookwrap').append(shelfTrigger);shelfTrigger.onclick=()=>showShelf();
 function showShelf(){save(false);renderShelf();shelf.classList.add('open');$('.app').inert=true;shelf.querySelector('#newNotebook').focus();const active=shelf.querySelector('[data-notebook="'+activeNotebook+'"]');requestAnimationFrame(()=>active?.scrollIntoView({block:'nearest',inline:'center'}))}
