@@ -560,12 +560,18 @@ body[data-appearance] .notebook-shelf{background:var(--app-bg)!important;color:v
 body[data-appearance] .shelf-hint,body[data-appearance] .notebook-card p,body[data-appearance] .notebook-card>button:not(.notebook-cover){color:var(--app-muted)}
 body[data-appearance] .shelf-heading button{border-color:var(--app-line);background:transparent;color:var(--app-text)}
 .shelf-heading>div{display:flex;gap:10px}.appearance-button svg{width:19px;height:19px}
-#launchGate{position:fixed;inset:0;z-index:200;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px}
-.launch-inner{max-width:320px;width:100%;text-align:center;display:flex;flex-direction:column;gap:12px}
-.launch-inner h1{font-size:24px;margin:0;color:var(--ink);font-weight:600}
-.launch-inner p{font-size:12px;color:var(--muted);margin:0;line-height:1.5}
-.launch-inner input{width:100%;border:1px solid var(--line);border-radius:10px;background:var(--paper);padding:11px;font-size:16px;outline:0;color:var(--ink)}
-.launch-inner .btn{width:100%}
+#launchGate{position:fixed;inset:0;z-index:200;background:#241c34;display:flex;align-items:center;justify-content:center;padding:24px}
+.launch-inner{max-width:320px;width:100%;text-align:center;display:flex;flex-direction:column;align-items:center;gap:11px}
+.launch-inner h1{font-size:26px;margin:0;color:#f3ecff;font-weight:600;font-style:italic;font-family:Georgia,serif}
+.launch-tagline{font-size:13px;color:#b6a9d6;margin:0 0 6px;font-style:italic}
+.launch-inner p.sync-copy{font-size:11px;color:#9789b8;margin:0;line-height:1.5}
+.launch-inner input{width:100%;border:1px solid rgba(255,255,255,.14);border-radius:12px;background:rgba(255,255,255,.08);padding:13px 14px;font-size:16px;outline:0;color:#f3ecff}
+.launch-inner input::placeholder{color:#8b7fa8}
+.launch-inner .btn{width:100%;border-radius:12px}
+.launch-inner .btn.primary{background:#c9a8f0;color:#241c34;font-weight:700;border:0;padding:13px}
+.launch-link{background:none;border:0;color:#c3b6e6;font-size:13px;cursor:pointer;padding:2px;text-decoration:underline;text-underline-offset:2px}
+#launchForgot{align-self:flex-end;margin-top:-4px}
+.launch-skip{display:flex;flex-direction:column;gap:4px;margin-top:6px}
 body[data-appearance] #coverModal .cover-settings,body[data-appearance] .modal .sheet{background:var(--app-panel);color:var(--app-text);border-color:var(--app-line)}
 body[data-appearance] .cover-settings-header h3,body[data-appearance] .cover-settings-header svg{color:var(--app-text)}
 body[data-appearance] .cover-preview-stage,body[data-appearance] .cover-settings-footer{background:var(--app-bg);border-color:var(--app-line)}
@@ -726,7 +732,7 @@ body[data-appearance] .cover-settings-footer .btn.primary{background:var(--app-t
 <div class="toast" id="toast">saved</div>
 
 <!-- Optional: only used if SUPABASE_URL/SUPABASE_ANON_KEY below are filled in. Sign-in is always optional — the app works fully offline without this. -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.46.2/dist/umd/supabase.js"></script>
 <script>
 // ---- Fill these in to enable cross-device sync. Leave blank to stay local-only forever. ----
 const SUPABASE_URL='https://sjcebmtkncwtcprewegi.supabase.co';
@@ -1582,7 +1588,7 @@ $('#changePasswordBtn').onclick=async()=>{
   btn.disabled=false;
 };
 
-// ---- First-launch welcome/sign-in gate (mirrors a simple one-screen onboarding) ----
+// ---- First-launch welcome/sign-in gate (mirrors Lamplight's login screen) ----
 // "continue on this device" never touches the network, so it can never get anyone stuck.
 const LAUNCH_SEEN_KEY='softleaf-launch-seen';
 let launchGate=null;
@@ -1590,17 +1596,23 @@ if(sb&&!localStorage.getItem(LAUNCH_SEEN_KEY)){
   launchGate=document.createElement('div');launchGate.id='launchGate';
   launchGate.innerHTML=`<div class="launch-inner">
     <h1>Softleaf</h1>
-    <p>Sync this journal across your devices, or keep it just on this one — you can always change your mind later from the shelf.</p>
+    <p class="launch-tagline">Your journal, wherever you are.</p>
     <input id="launchEmail" type="email" placeholder="you@example.com" autocomplete="email">
     <input id="launchPassword" type="password" placeholder="••••••••" autocomplete="current-password">
+    <button type="button" class="launch-link" id="launchForgot">Forgot password?</button>
+    <p id="launchForgotNote" class="sync-copy" hidden>No email reset yet — just message me and I'll help you back in.</p>
     <p id="launchAuthError" class="sync-copy" hidden></p>
-    <button class="btn primary" id="launchSignIn">sign in</button>
-    <button class="btn" id="launchSignUp">create account instead</button>
-    <button class="btn" id="launchSkip">continue on this device</button>
+    <button class="btn primary" id="launchSignIn">Sign in</button>
+    <button type="button" class="launch-link" id="launchSignUp">New here? Create an account</button>
+    <div class="launch-skip">
+      <button type="button" class="launch-link" id="launchSkip">Continue without an account</button>
+      <p class="sync-copy">Local only · no cloud sync · progress won't follow you across devices</p>
+    </div>
   </div>`;
   document.body.append(launchGate);
   $('#launchSignIn').onclick=()=>signInOrUp('signin',$('#launchEmail').value.trim(),$('#launchPassword').value,$('#launchAuthError'),[$('#launchSignIn'),$('#launchSignUp')]);
   $('#launchSignUp').onclick=()=>signInOrUp('signup',$('#launchEmail').value.trim(),$('#launchPassword').value,$('#launchAuthError'),[$('#launchSignIn'),$('#launchSignUp')]);
+  $('#launchForgot').onclick=()=>$('#launchForgotNote').hidden=!$('#launchForgotNote').hidden;
   $('#launchSkip').onclick=()=>dismissLaunchGate();
 }
 function dismissLaunchGate(){localStorage.setItem(LAUNCH_SEEN_KEY,'1');launchGate?.remove();launchGate=null}
