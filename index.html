@@ -1619,7 +1619,12 @@ function dismissLaunchGate(){localStorage.setItem(LAUNCH_SEEN_KEY,'1');launchGat
 function renderLaunchGate(){if(launchGate&&syncSession)dismissLaunchGate()}
 
 if(sb)sb.auth.onAuthStateChange((event,session)=>{
-  if((event==='SIGNED_IN'||event==='INITIAL_SESSION')&&session){
+  if(event==='INITIAL_SESSION'&&session){
+    // Session restored on a normal page load (already signed in) — just pick it up quietly.
+    // Never pull/reload here, or every load would re-trigger a "just signed in" sync forever.
+    syncSession=session;renderSyncModal();renderLaunchGate();
+  }
+  if(event==='SIGNED_IN'&&session){
     const isNew=!syncSession||syncSession.user.id!==session.user.id;
     syncSession=session;renderSyncModal();renderLaunchGate();
     if(isNew)pullOrPushInitial();
