@@ -31,15 +31,17 @@ body{overflow:hidden;background:#000;font-family:'Inter',system-ui,sans-serif}
 }
 
 /* ── Bottom panel — one floating glass card, bottom of screen.
-   Default state: docked, but pulled up well clear of the screen edge
-   so the grab handle + input row have real breathing room (not just
-   the bare minimum). Tapping the grab handle adds ".expanded": the
-   card lifts fully into view with its normal floating margin and the
-   list opens. ── */
+   Default state: docked, shifted down by a fixed pixel amount
+   (--dock-shift) so the grab handle + input row have real breathing
+   room. Bottom anchor stays constant between states — only the
+   transform changes — so a JS drag can interpolate it smoothly.
+   Tapping/dragging the grab handle adds ".expanded": the card lifts
+   fully into view and the list opens. ── */
 #bottom-panel{
+  --dock-shift: 40px;
   position:fixed;z-index:901;
   left:16px;right:16px;
-  bottom:10px;
+  bottom:var(--bar-bot);
   max-width:var(--bar-w);margin:0 auto;
   display:flex;flex-direction:column;gap:10px;
   background:var(--g-bg);
@@ -48,15 +50,15 @@ body{overflow:hidden;background:#000;font-family:'Inter',system-ui,sans-serif}
   border-radius:28px 28px 0 0;
   box-shadow:var(--g-shadow);
   padding:18px 18px 34px;
-  transform:translateY(20%);
-  transition:transform .26s cubic-bezier(.16,1,.3,1), bottom .26s cubic-bezier(.16,1,.3,1), padding .2s ease, border-radius .2s ease;
+  transform:translateY(var(--dock-shift));
+  transition:transform .26s cubic-bezier(.16,1,.3,1), padding .2s ease, border-radius .2s ease;
 }
 #bottom-panel.expanded{
-  bottom:var(--bar-bot);
   transform:translateY(0);
   border-radius:28px;
   padding:18px 18px calc(env(safe-area-inset-bottom,0px) + 14px);
 }
+#bottom-panel.dragging{transition:none}
 
 .header-icon-btn{
   background:none;border:none;padding:0;margin:0;
@@ -67,17 +69,23 @@ body{overflow:hidden;background:#000;font-family:'Inter',system-ui,sans-serif}
 .header-icon-btn:hover{opacity:.7}
 .header-icon-btn:active{transform:scale(.9)}
 
-/* Grab handle — same affordance as Apple Maps' bottom sheet: a small
-   bar the user taps to slide the panel open/closed. */
+/* Grab handle — same affordance as Apple Maps' bottom sheet: tap or
+   drag it to slide the panel open/closed. The touch target is much
+   bigger than the thin visible bar so it's easy to grab on mobile. */
 #panel-grabber{
-  width:44px;height:5px;border-radius:3px;
-  background:rgba(255,255,255,.45);
-  margin:0 auto;
-  cursor:pointer;
-  transition:background .15s;
+  width:60px;height:24px;
+  display:flex;align-items:center;justify-content:center;
+  margin:-6px auto -8px;
+  cursor:pointer;touch-action:none;
   -webkit-tap-highlight-color:transparent;
 }
-#panel-grabber:hover{background:rgba(255,255,255,.65)}
+#panel-grabber::before{
+  content:'';
+  width:44px;height:5px;border-radius:3px;
+  background:rgba(255,255,255,.45);
+  transition:background .15s;
+}
+#panel-grabber:hover::before{background:rgba(255,255,255,.65)}
 
 /* ── Ambience panel — centered modal, same glass as the bottom panel ── */
 #amb-panel{
@@ -118,6 +126,26 @@ body{overflow:hidden;background:#000;font-family:'Inter',system-ui,sans-serif}
 }
 #task-submit:hover{opacity:.7}
 #task-submit:active{transform:scale(.9)}
+
+/* Settings gear (+ its divider) only make sense once the card is
+   pulled up — no point showing ambience controls while docked. */
+#settings-wrap{
+  display:none;
+  align-items:center;gap:12px;flex-shrink:0;
+}
+#bottom-panel.expanded #settings-wrap{display:flex}
+
+/* App name — a quiet, fixed label in the top-left corner, separate
+   from the floating panel below. */
+#app-title-label{
+  position:fixed;z-index:902;
+  top:calc(env(safe-area-inset-top,0px) + 18px);
+  left:20px;
+  font-family:var(--sans);font-weight:700;font-size:18px;color:#fff;
+  letter-spacing:-.01em;
+  text-shadow:0 1px 4px rgba(0,0,0,.35);
+  pointer-events:none;
+}
 
 /* Collapsible task list — hidden/collapsed until the chevron opens it */
 #todo-list-wrap{
@@ -245,6 +273,7 @@ body{overflow:hidden;background:#000;font-family:'Inter',system-ui,sans-serif}
   #task-input{font-size:16px}
   #amb-panel{width:min(308px,calc(100vw - 32px))}
   #todo-list-wrap{max-height:min(290px,50vh)}
+  #app-title-label{font-size:16px;top:calc(env(safe-area-inset-top,0px) + 14px);left:16px}
   .td-item{padding:12px 14px}
   .td-check{width:22px;height:22px}
   .td-text{font-size:13px}
@@ -278,6 +307,7 @@ body{overflow:hidden;background:#000;font-family:'Inter',system-ui,sans-serif}
 <body>
 <canvas id="c"></canvas>
 <div id="lamp-tooltip" class="hidden"></div>
+<div id="app-title-label">Voxel Garden</div>
 
 <!-- Bottom panel — one floating card, docked mostly below the screen edge.
      The input row is always visible and typable. The grab handle bar
@@ -292,15 +322,17 @@ body{overflow:hidden;background:#000;font-family:'Inter',system-ui,sans-serif}
         <path d="M5 12h14M12 5l7 7-7 7"/>
       </svg>
     </button>
-    <div class="add-panel-divider"></div>
-    <button id="settings-fab" class="header-icon-btn" title="Ambience settings">
-      <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/>
-        <line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/>
-        <line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/>
-        <line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/>
-      </svg>
-    </button>
+    <div id="settings-wrap">
+      <div class="add-panel-divider"></div>
+      <button id="settings-fab" class="header-icon-btn" title="Ambience settings">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/>
+          <line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/>
+          <line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/>
+          <line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/>
+        </svg>
+      </button>
+    </div>
   </div>
 
   <div id="todo-list-wrap" class="hidden">
@@ -1334,10 +1366,43 @@ function collapsePanel(){
   updateSubtitle();
 }
 
-panelGrabber.addEventListener('click', e=>{
+// ── Drag the grab handle to slide the panel — not just tap it.
+// Follows the finger 1:1 while dragging, then snaps fully open or
+// fully docked based on where it's released (or toggles on a plain
+// tap with negligible movement). ──────────────────────────────────
+const DOCK_PX = 40; // keep in sync with the --dock-shift CSS variable
+let dragActive = false, dragStartY = 0, dragStartShift = 0, dragMoved = false;
+
+panelGrabber.addEventListener('pointerdown', e=>{
   e.stopPropagation();
-  if(bottomPanel.classList.contains('expanded')) collapsePanel(); else expandPanel();
+  dragActive = true; dragMoved = false;
+  dragStartY = e.clientY;
+  dragStartShift = bottomPanel.classList.contains('expanded') ? 0 : DOCK_PX;
+  bottomPanel.classList.add('dragging');
+  panelGrabber.setPointerCapture(e.pointerId);
 });
+
+panelGrabber.addEventListener('pointermove', e=>{
+  if(!dragActive) return;
+  const dy = e.clientY - dragStartY;
+  if(Math.abs(dy) > 4) dragMoved = true;
+  const shift = Math.max(0, Math.min(DOCK_PX, dragStartShift + dy));
+  bottomPanel.style.transform = `translateY(${shift}px)`;
+});
+
+function endDrag(e){
+  if(!dragActive) return;
+  dragActive = false;
+  bottomPanel.classList.remove('dragging');
+  const dy = e.clientY - dragStartY;
+  const settleExpanded = !dragMoved
+    ? !bottomPanel.classList.contains('expanded') // plain tap: toggle
+    : (dragStartShift + dy) < DOCK_PX / 2;          // real drag: snap to nearest
+  bottomPanel.style.transform = '';
+  if(settleExpanded) expandPanel(); else collapsePanel();
+}
+panelGrabber.addEventListener('pointerup', endDrag);
+panelGrabber.addEventListener('pointercancel', endDrag);
 
 // Click anywhere outside the panels closes the Ambience modal and
 // docks the bottom panel back down (if it was expanded)
