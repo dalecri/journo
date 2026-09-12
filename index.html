@@ -1525,9 +1525,11 @@ syncModal.innerHTML=`<div class="sheet">
     <input id="syncEmail" type="email" placeholder="you@example.com" autocomplete="email">
     <label for="syncPassword">Password</label>
     <input id="syncPassword" type="password" placeholder="••••••••" autocomplete="current-password">
+    <button type="button" class="launch-link" id="syncForgot">Forgot password?</button>
+    <p id="syncForgotNote" class="sync-copy" hidden></p>
     <p id="syncAuthError" class="sync-copy" hidden></p>
-    <div class="row"><button class="btn" id="skipSync">use this device only</button><button class="btn primary" id="signInSync">sign in</button></div>
-    <div class="row"><button class="btn" id="signUpSync">create account instead</button></div>
+    <div class="row"><button class="btn" id="skipSync">use this device only</button><button class="btn primary" id="syncSubmit">sign in</button></div>
+    <div class="row"><button class="btn" id="syncModeToggle">create account instead</button></div>
   </div>
   <div id="syncSignedIn" hidden>
     <p id="syncAccountLine"></p>
@@ -1554,7 +1556,7 @@ function renderSyncModal(){
     $('#syncStatusLine').textContent=syncStatus==='syncing'?'Syncing…':syncStatus==='error'?'Could not reach the server — your changes are still saved on this device.':'Up to date.';
     $('#newPassword').value='';$('#newPasswordConfirm').value='';$('#passwordChangeMsg').hidden=true;
   }else{
-    $('#syncAuthError').hidden=true;
+    $('#syncAuthError').hidden=true;$('#syncForgotNote').hidden=true;resetSyncFormMode();
   }
 }
 syncUiRefresh=()=>{if(syncModal.classList.contains('open'))renderSyncModal();renderLaunchGate()};
@@ -1574,8 +1576,28 @@ async function signInOrUp(mode,email,password,errEl,btns){
   }
   btns.forEach(b=>b.disabled=false);
 }
-$('#signInSync').onclick=()=>signInOrUp('signin',$('#syncEmail').value.trim(),$('#syncPassword').value,$('#syncAuthError'),[$('#signInSync'),$('#signUpSync')]);
-$('#signUpSync').onclick=()=>signInOrUp('signup',$('#syncEmail').value.trim(),$('#syncPassword').value,$('#syncAuthError'),[$('#signInSync'),$('#signUpSync')]);
+async function sendPasswordReset(email,noteEl,btnEl){
+  if(!email){noteEl.textContent='Enter your email first.';noteEl.hidden=false;return}
+  btnEl.disabled=true;
+  try{const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo:window.location.href});if(error)throw error;noteEl.textContent='Check your email for a reset link.';noteEl.hidden=false}
+  catch(err){console.error('Softleaf sync: reset failed',err);noteEl.textContent=err.message||'Could not send a reset email — try again.';noteEl.hidden=false}
+  btnEl.disabled=false;
+}
+// Wires a submit button + "sign in <-> create account" toggle link so the button
+// label always matches what it's actually about to do, and (optionally) a forgot-password link.
+function wireAuthForm(submitBtn,toggleBtn,emailEl,passwordEl,errEl,forgotBtn,forgotNoteEl){
+  let mode='signin';
+  function updateModeUI(){
+    submitBtn.textContent=mode==='signin'?'Sign in':'Create account';
+    toggleBtn.textContent=mode==='signin'?"New here? Create an account":'Already have an account? Sign in';
+  }
+  updateModeUI();
+  toggleBtn.onclick=()=>{mode=mode==='signin'?'signup':'signin';errEl.hidden=true;updateModeUI()};
+  submitBtn.onclick=()=>signInOrUp(mode,emailEl.value.trim(),passwordEl.value,errEl,[submitBtn,toggleBtn]);
+  if(forgotBtn)forgotBtn.onclick=()=>sendPasswordReset(emailEl.value.trim(),forgotNoteEl,forgotBtn);
+  return function resetMode(){mode='signin';updateModeUI()};
+}
+const resetSyncFormMode=wireAuthForm($('#syncSubmit'),$('#syncModeToggle'),$('#syncEmail'),$('#syncPassword'),$('#syncAuthError'),$('#syncForgot'),$('#syncForgotNote'));
 $('#signOutSync').onclick=async()=>{try{await sb.auth.signOut()}catch{}syncSession=null;syncStatus='local';renderSyncModal();toast('Signed out — this device keeps its own copy')};
 $('#forceSyncNow').onclick=()=>pushSnapshot();
 $('#changePasswordBtn').onclick=async()=>{
@@ -1600,19 +1622,17 @@ if(sb&&!localStorage.getItem(LAUNCH_SEEN_KEY)){
     <input id="launchEmail" type="email" placeholder="you@example.com" autocomplete="email">
     <input id="launchPassword" type="password" placeholder="••••••••" autocomplete="current-password">
     <button type="button" class="launch-link" id="launchForgot">Forgot password?</button>
-    <p id="launchForgotNote" class="sync-copy" hidden>No email reset yet — just message me and I'll help you back in.</p>
+    <p id="launchForgotNote" class="sync-copy" hidden></p>
     <p id="launchAuthError" class="sync-copy" hidden></p>
-    <button class="btn primary" id="launchSignIn">Sign in</button>
-    <button type="button" class="launch-link" id="launchSignUp">New here? Create an account</button>
+    <button class="btn primary" id="launchSubmit">Sign in</button>
+    <button type="button" class="launch-link" id="launchModeToggle">New here? Create an account</button>
     <div class="launch-skip">
       <button type="button" class="launch-link" id="launchSkip">Continue without an account</button>
       <p class="sync-copy">Local only · no cloud sync · progress won't follow you across devices</p>
     </div>
   </div>`;
   document.body.append(launchGate);
-  $('#launchSignIn').onclick=()=>signInOrUp('signin',$('#launchEmail').value.trim(),$('#launchPassword').value,$('#launchAuthError'),[$('#launchSignIn'),$('#launchSignUp')]);
-  $('#launchSignUp').onclick=()=>signInOrUp('signup',$('#launchEmail').value.trim(),$('#launchPassword').value,$('#launchAuthError'),[$('#launchSignIn'),$('#launchSignUp')]);
-  $('#launchForgot').onclick=()=>$('#launchForgotNote').hidden=!$('#launchForgotNote').hidden;
+  wireAuthForm($('#launchSubmit'),$('#launchModeToggle'),$('#launchEmail'),$('#launchPassword'),$('#launchAuthError'),$('#launchForgot'),$('#launchForgotNote'));
   $('#launchSkip').onclick=()=>dismissLaunchGate();
 }
 function dismissLaunchGate(){localStorage.setItem(LAUNCH_SEEN_KEY,'1');launchGate?.remove();launchGate=null}
@@ -1630,6 +1650,11 @@ if(sb)sb.auth.onAuthStateChange((event,session)=>{
     if(isNew)pullOrPushInitial();
   }
   if(event==='SIGNED_OUT'){syncSession=null;syncStatus='local';renderSyncModal()}
+  if(event==='PASSWORD_RECOVERY'&&session){
+    syncSession=session;renderLaunchGate();renderSyncModal();
+    openModal('syncModal');
+    toast('Enter a new password below to finish resetting');
+  }
 });
 $('#notebookName').addEventListener('input',refreshCoverThemePreview);refreshAppearance();refreshCoverThemePreview();renderShelf();
 
