@@ -807,7 +807,7 @@ const localStorage=await createIndexedDbStorage();
 // Everything below is inert unless SUPABASE_URL/SUPABASE_ANON_KEY are filled in AND
 // the person actually signs in via the sync button. Until then this app behaves
 // exactly as a local-only, IndexedDB-backed journal — nothing here changes that.
-const sb=(SUPABASE_URL&&SUPABASE_ANON_KEY&&window.supabase)?window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY):null;
+const sb=(SUPABASE_URL&&SUPABASE_ANON_KEY&&window.supabase)?window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY,{auth:{lock:async(name,acquireTimeout,fn)=>await fn()}}):null;
 let syncSession=null,syncStatus='local',syncTimer=null,syncBusy=false,syncUiRefresh=()=>{};
 function snapshotLocalData(){const out={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);out[k]=localStorage.getItem(k)}return out}
 function hydrateLocalData(data){Object.entries(data||{}).forEach(([k,v])=>_rawSetItem(k,v))}
